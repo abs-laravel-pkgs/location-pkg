@@ -23,9 +23,6 @@ class StatesC extends Migration {
 			$table->softDeletes();
 
 			$table->foreign('country_id')->references('id')->on('countries')->onDelete('CASCADE')->onUpdate('cascade');
-			$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 
 			$table->unique(["country_id", "code"]);
 			$table->unique(["country_id", "name"]);

@@ -23,14 +23,11 @@ class RegionC extends Migration {
 			$table->timestamps();
 			$table->softdeletes();
 
-			$table->foreign('company_id')->references('id')->on('companies')->onDelete('CASCADE')->onUpdate('cascade');
 			$table->foreign('state_id')->references('id')->on('states')->onDelete('CASCADE')->onUpdate('cascade');
-			$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 
-			$table->unique(["company_id", "state_id", "name"]);
-			$table->unique(["company_id", "state_id", "code"]);
+			$table->unique(["code", "state_id"]);
+			$table->unique(["name", "state_id"]);
+
 		});
 
 	}

@@ -11,18 +11,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class State extends Model {
 	use SeederTrait;
 	use SoftDeletes;
+
 	protected $table = 'states';
-	public $timestamps = true;
 	protected $fillable = [
 		'code',
 		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
-		'company_id',
-		'address',
+		'country_id',
 	];
+
+	public function country() {
+		return $this->belongsTo('Abs\Basic\Country');
+	}
+
+	public static function getStates($params) {
+		$query = State::select('id', 'code', 'name', 'country_id')->orderBy('name');
+		if ($params['country_id']) {
+			$query->where('country_id', $params['country_id']);
+		}
+		$state_list = $query->get();
+
+		return $state_list;
+	}
 
 	public static function createFromObject($record_data) {
 
@@ -58,5 +67,4 @@ class State extends Model {
 		$record->save();
 		return $record;
 	}
-
 }

@@ -11,17 +11,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class City extends Model {
 	use SeederTrait;
 	use SoftDeletes;
+
 	protected $table = 'cities';
-	public $timestamps = true;
 	protected $fillable = [
 		'code',
 		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
-		'company_id',
-		'address',
+		'state_id',
 	];
 
 	public static function createFromObject($record_data) {
@@ -58,5 +53,4 @@ class City extends Model {
 		$record->save();
 		return $record;
 	}
-
 }

@@ -23,10 +23,6 @@ class CountriesC extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-
 			$table->unique(["code"]);
 			$table->unique(["iso_code"]);
 			$table->unique(["name"]);
