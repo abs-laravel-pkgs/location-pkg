@@ -71,7 +71,8 @@ class CountryController extends Controller {
 			->make(true);
 	}
 
-	public function getCountryFormData($id = NULL) {
+	public function getCountryFormData(Request $r) {
+		$id = $r->id;
 		if (!$id) {
 			$state = new Country;
 			$address = new Address;

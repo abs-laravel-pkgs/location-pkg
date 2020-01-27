@@ -5,12 +5,10 @@
 @endif
 
 <script type="text/javascript">
-    var country_list_template_url = "{{URL::asset($location_pkg_prefix.'/public/angular/location-pkg/pages/country/list.html')}}";
-    var country_get_form_data_url = "{{url('location-pkg/country/get-form-data/')}}";
-    var country_form_template_url = "{{URL::asset($location_pkg_prefix.'/public/angular/location-pkg/pages/country/form.html')}}";
-    var country_delete_data_url = "{{url('location-pkg/country/delete/')}}";
+    var country_list_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/list.html')}}";
+    var country_form_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/form.html')}}";
 </script>
-<script type="text/javascript" src="{{URL::asset($location_pkg_prefix.'/public/angular/location-pkg/pages/country/controller.js?v=2')}}"></script>
+<script type="text/javascript" src="{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/controller.js?v=2')}}"></script>
 
 <script type="text/javascript">
     var state_list_template_url = "{{URL::asset($location_pkg_prefix.'/public/angular/location-pkg/pages/state/list.html')}}";

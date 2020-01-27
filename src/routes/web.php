@@ -4,7 +4,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 
 	//COUNTRY
 	Route::get('/countries/get-list', 'CountryController@getCountryList')->name('getCountryList');
-	Route::get('/country/get-form-data/{id?}', 'StateController@getCountryFormData')->name('getCountryFormData');
+	Route::get('/country/get-form-data', 'StateController@getCountryFormData')->name('getCountryFormData');
 	Route::post('/country/save', 'CountryController@saveCountry')->name('saveCountry');
 	Route::get('/country/delete/{id}', 'CountryController@deleteCountry')->name('deleteCountry');
 
