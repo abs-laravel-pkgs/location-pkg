@@ -17,6 +17,8 @@ class LocationPkgServiceProvider extends ServiceProvider {
 		$this->loadViewsFrom(__DIR__ . '/views', 'location-pkg');
 		$this->publishes([
 			__DIR__ . '/public' => base_path('public'),
+			__DIR__ . '/database/seeds/client' => 'database/seeds',
+			__DIR__ . '/config/config.php' => config_path('location-pkg.php'),
 		]);
 	}
 
