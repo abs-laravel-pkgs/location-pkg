@@ -28,11 +28,17 @@ class LocationPermissionSeeder extends Seeder {
 			[
 				'display_order' => 2,
 				'parent' => 'countries',
-				'name' => 'delete-country',
+				'name' => 'edit-country',
 				'display_name' => 'Edit',
 			],
 			[
 				'display_order' => 3,
+				'parent' => 'countries',
+				'name' => 'view-country',
+				'display_name' => 'View',
+			],
+			[
+				'display_order' => 4,
 				'parent' => 'countries',
 				'name' => 'delete-country',
 				'display_name' => 'Delete',
@@ -54,11 +60,17 @@ class LocationPermissionSeeder extends Seeder {
 			[
 				'display_order' => 2,
 				'parent' => 'states',
-				'name' => 'delete-state',
+				'name' => 'edit-state',
 				'display_name' => 'Edit',
 			],
 			[
 				'display_order' => 3,
+				'parent' => 'states',
+				'name' => 'view-state',
+				'display_name' => 'View',
+			],
+			[
+				'display_order' => 4,
 				'parent' => 'states',
 				'name' => 'delete-state',
 				'display_name' => 'Delete',
@@ -80,11 +92,17 @@ class LocationPermissionSeeder extends Seeder {
 			[
 				'display_order' => 2,
 				'parent' => 'cities',
-				'name' => 'delete-city',
+				'name' => 'edit-city',
 				'display_name' => 'Edit',
 			],
 			[
 				'display_order' => 3,
+				'parent' => 'cities',
+				'name' => 'view-city',
+				'display_name' => 'View',
+			],
+			[
+				'display_order' => 4,
 				'parent' => 'cities',
 				'name' => 'delete-city',
 				'display_name' => 'Delete',
@@ -106,11 +124,17 @@ class LocationPermissionSeeder extends Seeder {
 			[
 				'display_order' => 2,
 				'parent' => 'regions',
-				'name' => 'delete-region',
+				'name' => 'edit-region',
 				'display_name' => 'Edit',
 			],
 			[
 				'display_order' => 3,
+				'parent' => 'regions',
+				'name' => 'view-region',
+				'display_name' => 'View',
+			],
+			[
+				'display_order' => 4,
 				'parent' => 'regions',
 				'name' => 'delete-region',
 				'display_name' => 'Delete',

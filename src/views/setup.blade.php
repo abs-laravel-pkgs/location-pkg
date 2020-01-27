@@ -7,6 +7,7 @@
 <script type="text/javascript">
     var country_list_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/list.html')}}";
     var country_form_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/form.html')}}";
+    var country_view_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/view.html')}}";
 </script>
 <script type="text/javascript" src="{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/country/controller.js?v=2')}}"></script>
 

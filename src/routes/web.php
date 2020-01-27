@@ -1,12 +1,13 @@
 <?php
 
-Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'], 'prefix' => 'LOCATION-pkg'], function () {
+Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'], 'prefix' => 'location-pkg'], function () {
 
 	//COUNTRY
 	Route::get('/countries/get-list', 'CountryController@getCountryList')->name('getCountryList');
-	Route::get('/country/get-form-data', 'StateController@getCountryFormData')->name('getCountryFormData');
+	Route::get('/country/get-form-data', 'CountryController@getCountryFormData')->name('getCountryFormData');
 	Route::post('/country/save', 'CountryController@saveCountry')->name('saveCountry');
-	Route::get('/country/delete/{id}', 'CountryController@deleteCountry')->name('deleteCountry');
+	Route::get('/country/delete', 'CountryController@deleteCountry')->name('deleteCountry');
+	Route::get('/country/view', 'CountryController@viewCountry')->name('viewCountry');
 
 	//STATE
 	Route::get('/states/get-list', 'StateController@getStateList')->name('getStateList');

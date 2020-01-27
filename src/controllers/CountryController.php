@@ -2,12 +2,11 @@
 
 namespace Abs\LocationPkg;
 use Abs\LocationPkg\Country;
-use App\Address;
-use App\Country;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
 use DB;
+use Entrust;
 use Illuminate\Http\Request;
 use Validator;
 use Yajra\Datatables\Datatables;
@@ -15,58 +14,69 @@ use Yajra\Datatables\Datatables;
 class CountryController extends Controller {
 
 	public function __construct() {
+		$this->data['theme'] = config('custom.admin_theme');
 	}
 
 	public function getCountryList(Request $request) {
-		$states = Country::withTrashed()
+		$countries = Country::withTrashed()
 			->select(
-				'states.id',
-				'states.code',
-				'states.name',
-				DB::raw('IF(states.mobile_no IS NULL,"--",states.mobile_no) as mobile_no'),
-				DB::raw('IF(states.email IS NULL,"--",states.email) as email'),
-				DB::raw('IF(states.deleted_at IS NULL,"Active","Inactive") as status')
+				'countries.id',
+				'countries.code',
+				'countries.name',
+				DB::raw('IF(countries.deleted_at IS NULL,"Active","Inactive") as status')
 			)
-			->where('states.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_code)) {
-					$query->where('states.code', 'LIKE', '%' . $request->state_code . '%');
+				if (!empty($request->country_code)) {
+					$query->where('countries.code', 'LIKE', '%' . $request->country_code . '%');
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_name)) {
-					$query->where('states.name', 'LIKE', '%' . $request->state_name . '%');
+				if (!empty($request->country_name)) {
+					$query->where('countries.name', 'LIKE', '%' . $request->country_name . '%');
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->mobile_no)) {
-					$query->where('states.mobile_no', 'LIKE', '%' . $request->mobile_no . '%');
+				if ($request->status == '1') {
+					$query->whereNull('countries.deleted_at');
+				} else if ($request->status == '0') {
+					$query->whereNotNull('countries.deleted_at');
 				}
 			})
-			->where(function ($query) use ($request) {
-				if (!empty($request->email)) {
-					$query->where('states.email', 'LIKE', '%' . $request->email . '%');
-				}
-			})
-			->orderby('states.id', 'desc');
+			->orderby('countries.id', 'desc');
 
-		return Datatables::of($states)
-			->addColumn('code', function ($state) {
-				$status = $state->status == 'Active' ? 'green' : 'red';
-				return '<span class="status-indicator ' . $status . '"></span>' . $state->code;
+		return Datatables::of($countries)
+			->addColumn('name', function ($countries) {
+				$status = $countries->status == 'Active' ? 'green' : 'red';
+				return '<span class="status-indicator ' . $status . '"></span>' . $countries->name;
 			})
-			->addColumn('action', function ($state) {
-				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
-				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
-				return '
-					<a href="#!/location-pkg/state/edit/' . $state->id . '">
-						<img src="' . $edit_img . '" alt="View" class="img-responsive">
-					</a>
-					<a href="javascript:;" data-toggle="modal" data-target="#delete_state"
-					onclick="angular.element(this).scope().deleteCountry(' . $state->id . ')" dusk = "delete-btn" title="Delete">
-					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
+			->addColumn('action', function ($countries) {
+				$edit = asset('public/themes/' . $this->data['theme'] . '/img/content/table/edit-yellow.svg');
+				$edit_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/edit-yellow-active.svg');
+				$view = asset('public/themes/' . $this->data['theme'] . '/img/content/table/eye.svg');
+				$view_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/eye-active.svg');
+				$delete = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-default.svg');
+				$delete_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-active.svg');
+
+				$action = '';
+				if (Entrust::can('edit-country')) {
+					$action .= '<a href="#!/location-pkg/country/edit/' . $countries->id . '">
+						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
+					</a>';
+				}
+				if (Entrust::can('view-country')) {
+					$action .= '<a href="#!/location-pkg/country/view/' . $countries->id . '">
+						<img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
+					</a>';
+
+				}
+				if (Entrust::can('delete-country')) {
+					$action .= '<a href="javascript:;" data-toggle="modal" data-target="#delete_country"
+					onclick="angular.element(this).scope().deleteCountry(' . $countries->id . ')" dusk = "delete-btn" title="Delete">
+					<img src="' . $delete . '" alt="Delete" class="img-responsive" onmouseover=this.src="' . $delete_active . '" onmouseout=this.src="' . $delete . '" >
 					</a>
 					';
+				}
+				return $action;
 			})
 			->make(true);
 	}
@@ -74,21 +84,23 @@ class CountryController extends Controller {
 	public function getCountryFormData(Request $r) {
 		$id = $r->id;
 		if (!$id) {
-			$state = new Country;
-			$address = new Address;
+			$country = new Country;
 			$action = 'Add';
 		} else {
-			$state = Country::withTrashed()->find($id);
-			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
-			if (!$address) {
-				$address = new Address;
-			}
+			$country = Country::withTrashed()->find($id);
 			$action = 'Edit';
 		}
-		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
-		$this->data['state'] = $state;
-		$this->data['address'] = $address;
+		$this->data['country'] = $country;
 		$this->data['action'] = $action;
+		$this->data['theme'];
+
+		return response()->json($this->data);
+	}
+
+	public function viewCountry(Request $request) {
+		$this->data['country'] = $country = Country::withTrashed()->find($request->id);
+		$this->data['action'] = 'View';
+		$this->data['theme'];
 
 		return response()->json($this->data);
 	}
@@ -98,39 +110,27 @@ class CountryController extends Controller {
 		try {
 			$error_messages = [
 				'code.required' => 'Country Code is Required',
-				'code.max' => 'Maximum 255 Characters',
-				'code.min' => 'Minimum 3 Characters',
+				'code.max' => 'Maximum 3 Characters',
+				'code.min' => 'Minimum 1 Characters',
 				'code.unique' => 'Country Code is already taken',
 				'name.required' => 'Country Name is Required',
 				'name.max' => 'Maximum 255 Characters',
 				'name.min' => 'Minimum 3 Characters',
-				'gst_number.required' => 'GST Number is Required',
-				'gst_number.max' => 'Maximum 191 Numbers',
-				'mobile_no.max' => 'Maximum 25 Numbers',
-				// 'email.required' => 'Email is Required',
-				'address_line1.required' => 'Address Line 1 is Required',
-				'address_line1.max' => 'Maximum 255 Characters',
-				'address_line1.min' => 'Minimum 3 Characters',
-				'address_line2.max' => 'Maximum 255 Characters',
-				// 'pincode.required' => 'Pincode is Required',
-				// 'pincode.max' => 'Maximum 6 Characters',
-				// 'pincode.min' => 'Minimum 6 Characters',
+				'name.unique' => 'Country Name is already taken',
 			];
 			$validator = Validator::make($request->all(), [
 				'code' => [
 					'required:true',
-					'max:255',
-					'min:3',
-					'unique:states,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+					'max:3',
+					'min:1',
+					'unique:countries,code,' . $request->id . ',id',
 				],
-				'name' => 'required|max:255|min:3',
-				'gst_number' => 'required|max:191',
-				'mobile_no' => 'nullable|max:25',
-				// 'email' => 'nullable',
-				'address' => 'required',
-				'address_line1' => 'required|max:255|min:3',
-				'address_line2' => 'max:255',
-				// 'pincode' => 'required|max:6|min:6',
+				'name' => [
+					'required:true',
+					'max:64',
+					'min:3',
+					'unique:countries,name,' . $request->id . ',id',
+				],
 			], $error_messages);
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
@@ -138,40 +138,25 @@ class CountryController extends Controller {
 
 			DB::beginTransaction();
 			if (!$request->id) {
-				$state = new Country;
-				$state->created_by_id = Auth::user()->id;
-				$state->created_at = Carbon::now();
-				$state->updated_at = NULL;
-				$address = new Address;
+				$country = new Country;
+				$country->created_by_id = Auth::user()->id;
+				$country->created_at = Carbon::now();
+				$country->updated_at = NULL;
 			} else {
-				$state = Country::withTrashed()->find($request->id);
-				$state->updated_by_id = Auth::user()->id;
-				$state->updated_at = Carbon::now();
-				$address = Address::where('address_of_id', 24)->where('entity_id', $request->id)->first();
+				$country = Country::withTrashed()->find($request->id);
+				$country->updated_by_id = Auth::user()->id;
+				$country->updated_at = Carbon::now();
 			}
-			$state->fill($request->all());
-			$state->company_id = Auth::user()->company_id;
+			$country->fill($request->all());
 			if ($request->status == 'Inactive') {
-				$state->deleted_at = Carbon::now();
-				$state->deleted_by_id = Auth::user()->id;
+				$country->deleted_at = Carbon::now();
+				$country->deleted_by_id = Auth::user()->id;
 			} else {
-				$state->deleted_by_id = NULL;
-				$state->deleted_at = NULL;
+				$country->deleted_by_id = NULL;
+				$country->deleted_at = NULL;
 			}
-			$state->gst_number = $request->gst_number;
-			$state->axapta_location_id = $request->axapta_location_id;
-			$state->save();
-
-			if (!$address) {
-				$address = new Address;
-			}
-			$address->fill($request->all());
-			$address->company_id = Auth::user()->company_id;
-			$address->address_of_id = 24;
-			$address->entity_id = $state->id;
-			$address->address_type_id = 40;
-			$address->name = 'Primary Address';
-			$address->save();
+			$country->iso_code = $request->code;
+			$country->save();
 
 			DB::commit();
 			if (!($request->id)) {
@@ -184,10 +169,9 @@ class CountryController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteCountry($id) {
-		$delete_status = Country::withTrashed()->where('id', $id)->forceDelete();
+	public function deleteCountry(Request $request) {
+		$delete_status = Country::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
-			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();
 			return response()->json(['success' => true]);
 		}
 	}
