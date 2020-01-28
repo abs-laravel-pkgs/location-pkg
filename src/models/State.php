@@ -20,7 +20,10 @@ class State extends Model {
 	];
 
 	public function country() {
-		return $this->belongsTo('Abs\Basic\Country');
+		return $this->belongsTo('Abs\LocationPkg\Country');
+	}
+	public function region() {
+		return $this->hasMany('Abs\LocationPkg\Region');
 	}
 
 	public static function getStates($params) {

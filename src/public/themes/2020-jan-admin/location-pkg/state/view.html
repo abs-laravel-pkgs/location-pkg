@@ -36,6 +36,7 @@
                                     <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                         <ul class="nav nav-pills editDetails-tabs">
                                             <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                            <li><a data-target="#regions" role="tab" data-toggle="tab" aria-expanded="true">Regions</a></li>
                                         </ul>
                                     </div><!-- Filters -->
                                 </div><!-- Tab Header -->
@@ -56,6 +57,10 @@
                                                         <span class="info">{{$ctrl.state.code}}</span>
                                                     </li>
                                                     <li class="claimed-coupon-list-item">
+                                                        <span class="label">Country</span>
+                                                        <span class="info">{{$ctrl.state.country.name}}</span>
+                                                    </li>
+                                                    <li class="claimed-coupon-list-item">
                                                         <span class="label">Active Status</span>
                                                         <span class="info">{{$ctrl.state.deleted_at ? 'Inactive' : 'Active'}}</span>
                                                     </li>
@@ -65,6 +70,46 @@
                                                 <div class="col-md-12">
                                                     <div class="tab-pane-footer text-right">
                                                         <a class="btn btn-grey btn-nxt">Next</a>
+                                                    </div><!-- Tab Footer -->
+                                                </div>
+                                            </div><!-- Row -->
+                                        </div><!-- Tab Pane Wrap -->
+                                    </div><!-- Tab Pane -->
+                                    <div class="tab-pane fade" id="regions" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="tab-pane-wrap">
+                                            <div class="row">
+                                                <div class="col-lg-9 col-md-8">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-form">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Region Name</th>
+                                                                    <th>Region Code</th>
+                                                                    <th>Active Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="(index, region) in $ctrl.regions">
+                                                                    <td>
+                                                                        <span class="info">{{region.name}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="info">{{region.code}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="info">{{region.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <input type="hidden" name="removed_region_id" id="removed_region_id" value="">
+                                                    </div><!-- Table Responsive -->
+                                                </div><!-- Column -->
+                                            </div><!-- Row -->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="tab-pane-footer text-right">
+                                                        <a class="btn btn-grey btn-prev">Previous</a>
                                                     </div><!-- Tab Footer -->
                                                 </div>
                                             </div><!-- Row -->

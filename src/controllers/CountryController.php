@@ -114,7 +114,7 @@ class CountryController extends Controller {
 				'code.min' => 'Minimum 1 Characters',
 				'code.unique' => 'Country Code is already taken',
 				'name.required' => 'Country Name is Required',
-				'name.max' => 'Maximum 255 Characters',
+				'name.max' => 'Maximum 64 Characters',
 				'name.min' => 'Minimum 3 Characters',
 				'name.unique' => 'Country Name is already taken',
 			];

@@ -16,13 +16,19 @@ class Region extends Model {
 	protected $fillable = [
 		'code',
 		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
 		'company_id',
-		'address',
+		'state_id',
 	];
+
+	protected $appends = ['switch_value'];
+
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	}
+
+	public function state() {
+		return $this->belongsTo('Abs\LocationPkg\State');
+	}
 
 	public static function createFromObject($record_data) {
 

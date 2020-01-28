@@ -11,9 +11,11 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 
 	//STATE
 	Route::get('/states/get-list', 'StateController@getStateList')->name('getStateList');
-	Route::get('/state/get-form-data/{id?}', 'StateController@getStateFormData')->name('getStateFormData');
+	Route::get('/state/get-form-data', 'StateController@getStateFormData')->name('getStateFormData');
 	Route::post('/state/save', 'StateController@saveState')->name('saveState');
-	Route::get('/state/delete/{id}', 'StateController@deleteState')->name('deleteState');
+	Route::get('/state/delete', 'StateController@deleteState')->name('deleteState');
+	Route::get('/state/view', 'StateController@viewState')->name('viewState');
+	Route::get('/state/state-filter', 'StateController@getStateFilter')->name('getStateFilter');
 
 	//CITY
 	Route::get('/cities/get-list', 'CityController@getCityList')->name('getCityList');
