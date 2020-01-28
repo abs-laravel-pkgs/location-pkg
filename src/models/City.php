@@ -14,10 +14,13 @@ class City extends Model {
 
 	protected $table = 'cities';
 	protected $fillable = [
-		'code',
 		'name',
 		'state_id',
 	];
+
+	public function state() {
+		return $this->belongsTo('Abs\LocationPkg\State');
+	}
 
 	public static function createFromObject($record_data) {
 

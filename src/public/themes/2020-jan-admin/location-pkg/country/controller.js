@@ -75,11 +75,12 @@ app.component('countryList', {
         $('.page-header-content .display-inline-block .data-table-title').html('Countries <span class="badge badge-secondary" id="table_info">0</span>');
         $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
         $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
-        if (self.hasPermission('add-user')) {
-            var addnew_block = $('#add_new_wrap').html();
+        if (self.hasPermission('add-country')) {
+            // var addnew_block = $('#add_new_wrap').html();
             $('.page-header-content .alignment-right .add_new_button').html(
-                '<a role="button" id="open" data-toggle="modal"  data-target="#modal-country-filter" class="btn btn-img"> <img src="' + image_scr + '" alt="Filter" onmouseover=this.src="' + image_scr1 + '" onmouseout=this.src="' + image_scr + '"></a>' +
-                '' + addnew_block + ''
+                '<a href="#!/location-pkg/country/add" role="button" class="btn btn-secondary">Add New</a>' +
+                '<a role="button" id="open" data-toggle="modal"  data-target="#modal-country-filter" class="btn btn-img"> <img src="' + image_scr + '" alt="Filter" onmouseover=this.src="' + image_scr1 + '" onmouseout=this.src="' + image_scr + '"></a>'
+                // '' + addnew_block + ''
             );
         }
         $('.btn-add-close').on("click", function() {
@@ -187,11 +188,11 @@ app.component('countryForm', {
 
         /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
-            $('.cndn-tabs li.active').next().children('a').trigger("click");
+            $('.editDetails-tabs li.active').next().children('a').trigger("click");
             tabPaneFooter();
         });
         $('.btn-prev').on("click", function() {
-            $('.cndn-tabs li.active').prev().children('a').trigger("click");
+            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
             tabPaneFooter();
         });
         $('.btn-pills').on("click", function() {

@@ -22,7 +22,7 @@
 <script type="text/javascript">
     var city_list_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/city/list.html')}}";
     var city_form_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/city/form.html')}}";
-    var city_view_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/city/form.html')}}";
+    var city_view_template_url = "{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/city/view.html')}}";
 </script>
 <script type="text/javascript" src="{{asset($location_pkg_prefix.'/public/themes/'.$theme.'/location-pkg/city/controller.js?v=2')}}"></script>
 

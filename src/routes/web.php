@@ -19,9 +19,11 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 
 	//CITY
 	Route::get('/cities/get-list', 'CityController@getCityList')->name('getCityList');
-	Route::get('/city/get-form-data/{id?}', 'CityController@getCityFormData')->name('getCityFormData');
+	Route::get('/city/get-form-data', 'CityController@getCityFormData')->name('getCityFormData');
 	Route::post('/city/save', 'CityController@saveCity')->name('saveCity');
-	Route::get('/city/delete/{id}', 'CityController@deleteCity')->name('deleteCity');
+	Route::get('/city/delete', 'CityController@deleteCity')->name('deleteCity');
+	Route::get('/city/view', 'CityController@viewCity')->name('viewCity');
+	Route::get('/city/city-filter', 'CityController@getCityFilter')->name('getCityFilter');
 
 	//REGION
 	Route::get('/regions/get-list', 'RegionController@getRegionList')->name('getRegionList');

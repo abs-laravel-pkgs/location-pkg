@@ -3,137 +3,161 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/location-pkg/city/list', {
         template: '<city-list></city-list>',
-        title: 'States',
+        title: 'Cities',
     }).
     when('/location-pkg/city/add', {
         template: '<city-form></city-form>',
-        title: 'Add State',
+        title: 'Add City',
     }).
     when('/location-pkg/city/edit/:id', {
         template: '<city-form></city-form>',
-        title: 'Edit State',
+        title: 'Edit City',
+    }).
+    when('/location-pkg/city/view/:id', {
+        template: '<city-view></city-view>',
+        title: 'View City',
     });
 }]);
 
 app.component('cityList', {
     templateUrl: city_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
+        self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
-        var table_scroll;
-        table_scroll = $('.page-main-content').height() - 37;
-        var dataTable = $('#citys_list').DataTable({
-            "dom": cndn_dom_structure,
+        var dataTable = $('#city_list').DataTable({
+            "dom": dom_structure,
             "language": {
-                // "search": "",
-                // "searchPlaceholder": "Search",
+                "search": "",
+                "searchPlaceholder": "Search",
                 "lengthMenu": "Rows _MENU_",
                 "paginate": {
                     "next": '<i class="icon ion-ios-arrow-forward"></i>',
                     "previous": '<i class="icon ion-ios-arrow-back"></i>'
                 },
             },
-            pageLength: 10,
             processing: true,
-            citySaveCallback: function(settings, data) {
-                localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
-            },
-            cityLoadCallback: function(settings) {
-                var city_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-                if (city_save_val) {
-                    $('#search_city').val(city_save_val.search.search);
-                }
-                return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-            },
             serverSide: true,
             paging: true,
-            citySave: true,
-            ordering: false,
-            scrollY: table_scroll + "px",
-            scrollCollapse: true,
+            stateSave: true,
             ajax: {
-                url: laravel_routes['getStateList'],
+                url: laravel_routes['getCityList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.city_code = $('#city_code').val();
-                    d.city_name = $('#city_name').val();
-                    d.mobile_no = $('#mobile_no').val();
-                    d.email = $('#email').val();
+                    d.city_name = $('#name').val();
+                    d.state_id = $('#state_id').val();
+                    d.status = $('#status').val();
                 },
             },
 
             columns: [
                 { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'code', name: 'citys.code' },
-                { data: 'name', name: 'citys.name' },
-                { data: 'mobile_no', name: 'citys.mobile_no' },
-                { data: 'email', name: 'citys.email' },
+                { data: 'name', name: 'cities.name' },
+                { data: 'state_name', name: 'states.name' },
+                { data: 'state_code', name: 'states.code' },
+                { data: 'country_name', name: 'countries.name' },
+                { data: 'country_code', name: 'countries.code' },
             ],
+            "initComplete": function(settings, json) {
+                $('.dataTables_length select').select2();
+                $('#modal-loading').modal('hide');
+            },
             "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html(total)
-                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
+                $('#table_info').html(total + ' / ' + max)
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
         });
-        $('.dataTables_length select').select2();
 
-        $scope.clear_search = function() {
-            $('#search_city').val('');
-            $('#citys_list').DataTable().search('').draw();
+        /* Page Title Appended */
+        $('.page-header-content .display-inline-block .data-table-title').html('Cities <span class="badge badge-secondary" id="table_info">0</span>');
+        $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
+        $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
+        if (self.hasPermission('add-city')) {
+            // var addnew_block = $('#add_new_wrap').html();
+            $('.page-header-content .alignment-right .add_new_button').html(
+                '<a href="#!/location-pkg/city/add" role="button" class="btn btn-secondary">Add New</a>' +
+                '<a role="button" id="open" data-toggle="modal"  data-target="#modal-city-filter" class="btn btn-img"> <img src="' + image_scr + '" alt="Filter" onmouseover=this.src="' + image_scr1 + '" onmouseout=this.src="' + image_scr + '"></a>'
+                // '' + addnew_block + ''
+            );
         }
-
-        var dataTables = $('#citys_list').dataTable();
-        $("#search_city").keyup(function() {
-            dataTables.fnFilter(this.value);
+        $('.btn-add-close').on("click", function() {
+            $('#city_list').DataTable().search('').draw();
         });
 
+        $('.btn-refresh').on("click", function() {
+            $('#city_list').DataTable().ajax.reload();
+        });
+
+        //FOCUS ON SEARCH FIELD
+        setTimeout(function() {
+            $('div.dataTables_filter input').focus();
+        }, 2500);
+
         //DELETE
-        $scope.deleteState = function($id) {
+        $scope.deleteCity = function($id) {
             $('#city_id').val($id);
         }
         $scope.deleteConfirm = function() {
             $id = $('#city_id').val();
             $http.get(
-                city_delete_data_url + '/' + $id,
+                laravel_routes['deleteCity'], {
+                    params: {
+                        id: $id,
+                    }
+                }
             ).then(function(response) {
                 if (response.data.success) {
-                    $noty = new Noty({
-                        type: 'success',
-                        layout: 'topRight',
-                        text: 'State Deleted Successfully',
-                    }).show();
-                    setTimeout(function() {
-                        $noty.close();
-                    }, 3000);
-                    $('#citys_list').DataTable().ajax.reload(function(json) {});
+                    custom_noty('success', 'City Deleted Successfully');
+                    $('#city_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/location-pkg/city/list');
                 }
             });
         }
 
         //FOR FILTER
-        $('#city_code').on('keyup', function() {
-            dataTables.fnFilter();
+        $http.get(
+            laravel_routes['getCityFilter']
+        ).then(function(response) {
+            // console.log(response);
+            self.state_list = response.data.state_list;
         });
-        $('#city_name').on('keyup', function() {
-            dataTables.fnFilter();
+        self.status = [
+            { id: '', name: 'Select Status' },
+            { id: '1', name: 'Active' },
+            { id: '0', name: 'Inactive' },
+        ];
+        $element.find('input').on('keydown', function(ev) {
+            ev.stopPropagation();
         });
-        $('#mobile_no').on('keyup', function() {
-            dataTables.fnFilter();
+        /* Modal Md Select Hide */
+        $('.modal').bind('click', function(event) {
+            if ($('.md-select-menu-container').hasClass('md-active')) {
+                $mdSelect.hide();
+            }
         });
-        $('#email').on('keyup', function() {
-            dataTables.fnFilter();
+
+        var datatables = $('#city_list').dataTable();
+        $('#name').on('keyup', function() {
+            datatables.fnFilter();
         });
+        $scope.onSelectedStatus = function(val) {
+            $("#status").val(val);
+            datatables.fnFilter();
+        }
+        $scope.onSelectedState = function(val) {
+            $("#state_id").val(val);
+            datatables.fnFilter();
+        }
         $scope.reset_filter = function() {
-            $("#city_name").val('');
-            $("#city_code").val('');
-            $("#mobile_no").val('');
-            $("#email").val('');
-            dataTables.fnFilter();
+            $("#name").val('');
+            $("#code").val('');
+            $("#status").val('');
+            $("#state_id").val('');
+            datatables.fnFilter();
         }
 
         $rootScope.loading = false;
@@ -144,22 +168,23 @@ app.component('cityList', {
 app.component('cityForm', {
     templateUrl: city_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
-        get_form_data_url = typeof($routeParams.id) == 'undefined' ? city_get_form_data_url : city_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
         $http.get(
-            get_form_data_url
+            laravel_routes['getCityFormData'], {
+                params: {
+                    id: typeof($routeParams.id) == 'undefined' ? null : $routeParams.id,
+                }
+            }
         ).then(function(response) {
             // console.log(response);
             self.city = response.data.city;
-            self.address = response.data.address;
-            self.country_list = response.data.country_list;
+            self.state_list = response.data.state_list;
+            self.theme = response.data.theme;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'Edit') {
-                $scope.onSelectedCountry(self.address.country_id);
-                $scope.onSelectedState(self.address.city_id);
                 if (self.city.deleted_at) {
                     self.switch_value = 'Inactive';
                 } else {
@@ -167,18 +192,16 @@ app.component('cityForm', {
                 }
             } else {
                 self.switch_value = 'Active';
-                self.city_list = [{ 'id': '', 'name': 'Select State' }];
-                self.city_list = [{ 'id': '', 'name': 'Select City' }];
             }
         });
 
         /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
-            $('.cndn-tabs li.active').next().children('a').trigger("click");
+            $('.editDetails-tabs li.active').next().children('a').trigger("click");
             tabPaneFooter();
         });
         $('.btn-prev').on("click", function() {
-            $('.cndn-tabs li.active').prev().children('a').trigger("click");
+            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
             tabPaneFooter();
         });
         $('.btn-pills').on("click", function() {
@@ -187,115 +210,27 @@ app.component('cityForm', {
         $scope.btnNxt = function() {}
         $scope.prev = function() {}
 
-        //SELECT STATE BASED COUNTRY
-        $scope.onSelectedCountry = function(id) {
-            city_get_city_by_country = vendor_get_city_by_country;
-            $http.post(
-                city_get_city_by_country, { 'country_id': id }
-            ).then(function(response) {
-                // console.log(response);
-                self.city_list = response.data.city_list;
-            });
-        }
-
-        //SELECT CITY BASED STATE
-        $scope.onSelectedState = function(id) {
-            city_get_city_by_city = vendor_get_city_by_city
-            $http.post(
-                city_get_city_by_city, { 'city_id': id }
-            ).then(function(response) {
-                // console.log(response);
-                self.city_list = response.data.city_list;
-            });
-        }
-
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
             rules: {
-                'code': {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 255,
-                },
                 'name': {
                     required: true,
                     minlength: 3,
                     maxlength: 255,
                 },
-                'cust_group': {
-                    maxlength: 100,
-                },
-                'gst_number': {
+                'state_id': {
                     required: true,
-                    maxlength: 100,
                 },
-                'dimension': {
-                    maxlength: 50,
-                },
-                'address': {
-                    required: true,
-                    minlength: 5,
-                    maxlength: 250,
-                },
-                'address_line1': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                'address_line2': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                // 'pincode': {
-                //     required: true,
-                //     minlength: 6,
-                //     maxlength: 6,
-                // },
             },
-            messages: {
-                'code': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'name': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'cust_group': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'dimension': {
-                    maxlength: 'Maximum of 50 charaters',
-                },
-                'gst_number': {
-                    maxlength: 'Maximum of 25 charaters',
-                },
-                'email': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'address_line1': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'address_line2': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                // 'pincode': {
-                //     maxlength: 'Maximum of 6 charaters',
-                // },
-            },
-            invalidHandler: function(event, validator) {
-                $noty = new Noty({
-                    type: 'error',
-                    layout: 'topRight',
-                    text: 'You have errors,Please check all tabs'
-                }).show();
-                setTimeout(function() {
-                    $noty.close();
-                }, 3000)
-            },
+            // invalidHandler: function(event, validator) {
+            //     custom_noty('error', 'You have errors,Please check all tabs');
+            // },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveState'],
+                        url: laravel_routes['saveCity'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -303,14 +238,7 @@ app.component('cityForm', {
                     })
                     .done(function(res) {
                         if (res.success == true) {
-                            $noty = new Noty({
-                                type: 'success',
-                                layout: 'topRight',
-                                text: res.message,
-                            }).show();
-                            setTimeout(function() {
-                                $noty.close();
-                            }, 3000);
+                            custom_noty('success', res.message);
                             $location.path('/location-pkg/city/list');
                             $scope.$apply();
                         } else {
@@ -320,14 +248,7 @@ app.component('cityForm', {
                                 for (var i in res.errors) {
                                     errors += '<li>' + res.errors[i] + '</li>';
                                 }
-                                $noty = new Noty({
-                                    type: 'error',
-                                    layout: 'topRight',
-                                    text: errors
-                                }).show();
-                                setTimeout(function() {
-                                    $noty.close();
-                                }, 3000);
+                                custom_noty('error', errors);
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/location-pkg/city/list');
@@ -337,16 +258,31 @@ app.component('cityForm', {
                     })
                     .fail(function(xhr) {
                         $('#submit').button('reset');
-                        $noty = new Noty({
-                            type: 'error',
-                            layout: 'topRight',
-                            text: 'Something went wrong at server',
-                        }).show();
-                        setTimeout(function() {
-                            $noty.close();
-                        }, 3000);
+                        custom_noty('error', 'Something went wrong at server');
                     });
             }
+        });
+    }
+});
+//------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+app.component('cityView', {
+    templateUrl: city_view_template_url,
+    controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
+        var self = this;
+        self.hasPermission = HelperService.hasPermission;
+        self.angular_routes = angular_routes;
+        $http.get(
+            laravel_routes['viewCity'], {
+                params: {
+                    id: $routeParams.id,
+                }
+            }
+        ).then(function(response) {
+            // console.log(response);
+            self.city = response.data.city;
+            self.action = response.data.action;
+            self.theme = response.data.theme;
         });
     }
 });

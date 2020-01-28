@@ -20,6 +20,7 @@ class StateController extends Controller {
 
 	public function getStateFilter() {
 		$this->data['country_list'] = collect(Country::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select Country']));
+		$this->data['theme'];
 		return response()->json($this->data);
 	}
 
