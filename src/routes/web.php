@@ -27,8 +27,10 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 
 	//REGION
 	Route::get('/regions/get-list', 'RegionController@getRegionList')->name('getRegionList');
-	Route::get('/region/get-form-data/{id?}', 'RegionController@getRegionFormData')->name('getRegionFormData');
+	Route::get('/region/get-form-data', 'RegionController@getRegionFormData')->name('getRegionFormData');
 	Route::post('/region/save', 'RegionController@saveRegion')->name('saveRegion');
-	Route::get('/region/delete/{id}', 'RegionController@deleteRegion')->name('deleteRegion');
+	Route::get('/region/delete', 'RegionController@deleteRegion')->name('deleteRegion');
+	Route::get('/region/view', 'RegionController@viewRegion')->name('viewRegion');
+	Route::get('/region/get-filter', 'RegionController@getRegionFilter')->name('getRegionFilter');
 
 });

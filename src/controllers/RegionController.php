@@ -2,12 +2,12 @@
 
 namespace Abs\LocationPkg;
 use Abs\LocationPkg\Region;
-use App\Address;
-use App\Country;
+use Abs\LocationPkg\State;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
 use DB;
+use Entrust;
 use Illuminate\Http\Request;
 use Validator;
 use Yajra\Datatables\Datatables;
@@ -15,79 +15,111 @@ use Yajra\Datatables\Datatables;
 class RegionController extends Controller {
 
 	public function __construct() {
+		$this->data['theme'] = config('custom.admin_theme');
+	}
+
+	public function getRegionFilter() {
+		$this->data['state_list'] = collect(State::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select State']));
+		$this->data['theme'];
+
+		return response()->json($this->data);
 	}
 
 	public function getRegionList(Request $request) {
-		$states = Region::withTrashed()
+		$regions = Region::withTrashed()
 			->select(
-				'states.id',
-				'states.code',
-				'states.name',
-				DB::raw('IF(states.mobile_no IS NULL,"--",states.mobile_no) as mobile_no'),
-				DB::raw('IF(states.email IS NULL,"--",states.email) as email'),
-				DB::raw('IF(states.deleted_at IS NULL,"Active","Inactive") as status')
+				'regions.id',
+				'regions.code',
+				'regions.name',
+				'states.name as state_name',
+				'states.code as state_code',
+				DB::raw('IF(regions.deleted_at IS NULL,"Active","Inactive") as status')
 			)
-			->where('states.company_id', Auth::user()->company_id)
+			->leftJoin('states', 'regions.state_id', 'states.id')
+			->where('regions.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_code)) {
-					$query->where('states.code', 'LIKE', '%' . $request->state_code . '%');
+				if (!empty($request->region_code)) {
+					$query->where('regions.code', 'LIKE', '%' . $request->region_code . '%');
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_name)) {
-					$query->where('states.name', 'LIKE', '%' . $request->state_name . '%');
+				if (!empty($request->region_name)) {
+					$query->where('regions.name', 'LIKE', '%' . $request->region_name . '%');
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->mobile_no)) {
-					$query->where('states.mobile_no', 'LIKE', '%' . $request->mobile_no . '%');
+				if (!empty($request->state_id)) {
+					$query->where('regions.state_id', $request->state_id);
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->email)) {
-					$query->where('states.email', 'LIKE', '%' . $request->email . '%');
+				if ($request->status == '1') {
+					$query->whereNull('states.deleted_at');
+				} else if ($request->status == '0') {
+					$query->whereNotNull('states.deleted_at');
 				}
 			})
-			->orderby('states.id', 'desc');
+			->orderby('regions.id', 'desc');
 
-		return Datatables::of($states)
-			->addColumn('code', function ($state) {
-				$status = $state->status == 'Active' ? 'green' : 'red';
-				return '<span class="status-indicator ' . $status . '"></span>' . $state->code;
+		return Datatables::of($regions)
+			->addColumn('name', function ($region) {
+				$status = $region->status == 'Active' ? 'green' : 'red';
+				return '<span class="status-indicator ' . $status . '"></span>' . $region->name;
 			})
-			->addColumn('action', function ($state) {
-				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
-				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
-				return '
-					<a href="#!/location-pkg/state/edit/' . $state->id . '">
-						<img src="' . $edit_img . '" alt="View" class="img-responsive">
-					</a>
-					<a href="javascript:;" data-toggle="modal" data-target="#delete_state"
-					onclick="angular.element(this).scope().deleteRegion(' . $state->id . ')" dusk = "delete-btn" title="Delete">
-					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
+			->addColumn('action', function ($region) {
+				$edit = asset('public/themes/' . $this->data['theme'] . '/img/content/table/edit-yellow.svg');
+				$edit_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/edit-yellow-active.svg');
+				$view = asset('public/themes/' . $this->data['theme'] . '/img/content/table/eye.svg');
+				$view_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/eye-active.svg');
+				$delete = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-default.svg');
+				$delete_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-active.svg');
+
+				$action = '';
+				if (Entrust::can('edit-region')) {
+					$action .= '<a href="#!/location-pkg/region/edit/' . $region->id . '">
+						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
+					</a>';
+				}
+				if (Entrust::can('view-region')) {
+					$action .= '<a href="#!/location-pkg/region/view/' . $region->id . '">
+						<img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
+					</a>';
+
+				}
+				if (Entrust::can('delete-region')) {
+					$action .= '<a href="javascript:;" data-toggle="modal" data-target="#delete_region"
+					onclick="angular.element(this).scope().deleteRegion(' . $region->id . ')" dusk = "delete-btn" title="Delete">
+					<img src="' . $delete . '" alt="Delete" class="img-responsive" onmouseover=this.src="' . $delete_active . '" onmouseout=this.src="' . $delete . '" >
 					</a>
 					';
+				}
+				return $action;
 			})
 			->make(true);
 	}
 
-	public function getRegionFormData($id = NULL) {
+	public function getRegionFormData(Request $request) {
+		$id = $request->id;
 		if (!$id) {
-			$state = new Region;
-			$address = new Address;
+			$region = new Region;
 			$action = 'Add';
 		} else {
-			$state = Region::withTrashed()->find($id);
-			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
-			if (!$address) {
-				$address = new Address;
-			}
+			$region = Region::withTrashed()->find($id);
 			$action = 'Edit';
 		}
-		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
-		$this->data['state'] = $state;
-		$this->data['address'] = $address;
+		$this->data['state_list'] = $state_list = Collect(State::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select State']);
+		$this->data['region'] = $region;
 		$this->data['action'] = $action;
+		$this->data['theme'];
+
+		return response()->json($this->data);
+	}
+
+	public function viewRegion(Request $request) {
+		$this->data['region'] = Region::withTrashed()->with([
+			'state',
+		])->find($request->id);
+		$this->data['theme'];
 
 		return response()->json($this->data);
 	}
@@ -97,39 +129,31 @@ class RegionController extends Controller {
 		try {
 			$error_messages = [
 				'code.required' => 'Region Code is Required',
-				'code.max' => 'Maximum 255 Characters',
-				'code.min' => 'Minimum 3 Characters',
+				'code.max' => 'Region Code Maximum 4 Characters',
+				'code.min' => 'Region Code Minimum 1 Characters',
 				'code.unique' => 'Region Code is already taken',
 				'name.required' => 'Region Name is Required',
-				'name.max' => 'Maximum 255 Characters',
-				'name.min' => 'Minimum 3 Characters',
-				'gst_number.required' => 'GST Number is Required',
-				'gst_number.max' => 'Maximum 191 Numbers',
-				'mobile_no.max' => 'Maximum 25 Numbers',
-				// 'email.required' => 'Email is Required',
-				'address_line1.required' => 'Address Line 1 is Required',
-				'address_line1.max' => 'Maximum 255 Characters',
-				'address_line1.min' => 'Minimum 3 Characters',
-				'address_line2.max' => 'Maximum 255 Characters',
-				// 'pincode.required' => 'Pincode is Required',
-				// 'pincode.max' => 'Maximum 6 Characters',
-				// 'pincode.min' => 'Minimum 6 Characters',
+				'name.max' => 'Region Name Maximum 191 Characters',
+				'name.min' => 'Region Name Minimum 3 Characters',
+				'name.unique' => 'Region Name is already taken',
+				'state_id.required' => 'State is Required',
 			];
 			$validator = Validator::make($request->all(), [
 				'code' => [
 					'required:true',
-					'max:255',
-					'min:3',
-					'unique:states,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+					'max:4',
+					'min:1',
+					'unique:regions,code,' . $request->id . ',id,state_id,' . $request->state_id,
+					'unique:regions,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',state_id,' . $request->state_id,
 				],
-				'name' => 'required|max:255|min:3',
-				'gst_number' => 'required|max:191',
-				'mobile_no' => 'nullable|max:25',
-				// 'email' => 'nullable',
-				'address' => 'required',
-				'address_line1' => 'required|max:255|min:3',
-				'address_line2' => 'max:255',
-				// 'pincode' => 'required|max:6|min:6',
+				'name' => [
+					'required:true',
+					'max:191',
+					'min:3',
+					'unique:regions,name,' . $request->id . ',id,state_id,' . $request->state_id,
+					'unique:regions,name,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',state_id,' . $request->state_id,
+				],
+				'state_id' => 'required',
 			], $error_messages);
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
@@ -137,40 +161,25 @@ class RegionController extends Controller {
 
 			DB::beginTransaction();
 			if (!$request->id) {
-				$state = new Region;
-				$state->created_by_id = Auth::user()->id;
-				$state->created_at = Carbon::now();
-				$state->updated_at = NULL;
-				$address = new Address;
+				$region = new Region;
+				$region->created_by_id = Auth::user()->id;
+				$region->created_at = Carbon::now();
+				$region->updated_at = NULL;
 			} else {
-				$state = Region::withTrashed()->find($request->id);
-				$state->updated_by_id = Auth::user()->id;
-				$state->updated_at = Carbon::now();
-				$address = Address::where('address_of_id', 24)->where('entity_id', $request->id)->first();
+				$region = Region::withTrashed()->find($request->id);
+				$region->updated_by_id = Auth::user()->id;
+				$region->updated_at = Carbon::now();
 			}
-			$state->fill($request->all());
-			$state->company_id = Auth::user()->company_id;
+			$region->fill($request->all());
+			$region->company_id = Auth::user()->company_id;
 			if ($request->status == 'Inactive') {
-				$state->deleted_at = Carbon::now();
-				$state->deleted_by_id = Auth::user()->id;
+				$region->deleted_at = Carbon::now();
+				$region->deleted_by_id = Auth::user()->id;
 			} else {
-				$state->deleted_by_id = NULL;
-				$state->deleted_at = NULL;
+				$region->deleted_by_id = NULL;
+				$region->deleted_at = NULL;
 			}
-			$state->gst_number = $request->gst_number;
-			$state->axapta_location_id = $request->axapta_location_id;
-			$state->save();
-
-			if (!$address) {
-				$address = new Address;
-			}
-			$address->fill($request->all());
-			$address->company_id = Auth::user()->company_id;
-			$address->address_of_id = 24;
-			$address->entity_id = $state->id;
-			$address->address_type_id = 40;
-			$address->name = 'Primary Address';
-			$address->save();
+			$region->save();
 
 			DB::commit();
 			if (!($request->id)) {
@@ -183,10 +192,9 @@ class RegionController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteRegion($id) {
-		$delete_status = Region::withTrashed()->where('id', $id)->forceDelete();
+	public function deleteRegion(Request $request) {
+		$delete_status = Region::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
-			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();
 			return response()->json(['success' => true]);
 		}
 	}

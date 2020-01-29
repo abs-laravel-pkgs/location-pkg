@@ -1,253 +1,106 @@
 <!-- Content Wrap -->
-<div class="content-wrap cndn-wrap">
-    <!-- Page Header -->
+<div class="content-wrap">
     <div class="page-header">
-        <div class="page-header-inner">
-            <div class="page-header-content-left">
-                <div class="page-header-content button-block">
-                    <a href="#!/location-pkg/state/list" type="button" class="btn-back btn-img">
-                        <img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" />
-                    </a>
-                </div><!-- Page Header Content -->
-                <div class="page-header-content title-block">
-                    <h1 class="title"><b>{{$ctrl.action}} State</b></h1>
-                    <p class="subtitle">
-                        <a href="#!/location-pkg/state/list">
-                            State List
-                        </a> /
-                        {{$ctrl.action}}
-                    </p>
-                </div><!-- Page Header Content -->
-            </div><!-- Page Header Content Left -->
-        </div><!-- Page Header Inner -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header-content">
+                        <div class="page-header-inner page-title display-inline-block">
+                            <div class="previous-page">
+                                <a href="#!/location-pkg/region/list"><img src="./public/themes/{{$ctrl.theme}}/img/content/previous.svg" class="img-responsive"></a>
+                            </div>
+                        </div><!-- Page Header Inner -->
+                        <div class="page-header-inner page-title display-inline-block">
+                            <h1 class="title">{{$ctrl.action}} Region</h1>
+                            <p class="subtitle">
+                                <a href="#!/location-pkg/region/list">
+                                    Regions
+                                </a> /
+                                {{$ctrl.action}}
+                            </p>
+                        </div><!-- Page Header Inner -->
+                    </div><!-- Page Header Content -->
+                </div><!-- Col Main -->
+            </div><!-- Row -->
+        </div><!-- Container -->
     </div><!-- Page Header -->
     <!-- Page Main Content -->
-    <div class="page-main-content form-content type2">
+    <div class="page-main-content">
         <form id="form" autocomplete="off">
-            <input type="hidden" name="id" value="{{$ctrl.state.id}}">
-            <div class="page-tab-form pb-70">
-                <div class="tab-form-wrap">
-                    <div class="tab-form-header">
-                        <div class="tab-header">
-                            <!-- Filters -->
-                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
-                                <ul class="nav nav-pills cndn-tabs">
-                                    <li class="active">
-                                        <a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">
-                                            General Information
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a data-target="#address-details" data-toggle="tab" aria-expanded="true" class="filter">
-                                            Address Details
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div><!-- Filters -->
-                        </div><!-- Tab Header -->
-                    </div><!-- Tab Form Header -->
-                    <div class="tab-form-body">
-                        <div class="tab-content">
-                            <!-- TAB PANEL -->
-                            <div class="tab-pane fade in active" id="general-information" data-animation="fadeInUp" data-animation-delay="300">
-                                <div class="tab-pane-wrap">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    State Code
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.state.code" name="code" placeholder="Enter State Code" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    State Name
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.state.name" name="name" placeholder="Enter State Name" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    GST Number
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.state.gst_number" name="gst_number" placeholder="Enter GST Number" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Mobile Number</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.state.mobile_no" name="mobile_no" placeholder="Enter Mobile Number" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Email</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.state.email" name="email" placeholder="Enter Email" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>State Group</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.state.cust_group" name="cust_group" placeholder="Enter State Group" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Dimension</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.state.dimension" name="dimension" placeholder="Enter Dimension" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>AXAPTA Location ID</label>
-                                                <input type="text" class="form-control" name="axapta_location_id" ng-model="$ctrl.state.axapta_location_id" placeholder="Enter AXAPTA Location ID">
-                                            </div><!-- Field -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    Active Status
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <div class="tab-switch">
-                                                    <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
-                                                        {{ $ctrl.switch_value }}
-                                                    </md-switch>
-                                                    <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
-                                                </div>
-                                            </div><!-- Form Group -->
-                                        </div><!-- Column -->
-                                        <div class="tab-pane-footer">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <a class="btn btn-primary btn-nxt">
-                                                        Next
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div><!-- Tab Footer -->
-                                    </div><!-- Row -->
-                                </div><!-- Tab Pane Wrap -->
-                            </div><!-- Tabe Pane -->
-                            <div class="tab-pane fade" id="address-details" data-animation="fadeInUp" data-animation-delay="300">
-                                <div class="tab-pane-wrap">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    Address Line 1
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.address.address_line1" name="address_line1" placeholder="Enter Address Line 1" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    Address Line 2
-                                                </label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.address.address_line2" name="address_line2" placeholder="Enter Address Line 2" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    Country
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <md-select ng-model="$ctrl.address.country_id" ng-change="onSelectedCountry($ctrl.address.country_id);$ctrl.address.state_id='';$ctrl.address.city_id=''" placeholder="Select Country" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchStateGroup" type="search" placeholder="Search State Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="State Group List">
-                                                        <md-option ng-value="country.id" ng-repeat="country in $ctrl.country_list | filter:searchTravel">
-                                                            {{country.name}}
-                                                        </md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="country_id" value='{{$ctrl.address.country_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    State
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <md-select ng-model="$ctrl.address.state_id" ng-change="onSelectedState($ctrl.address.state_id);$ctrl.address.city_id=''" placeholder="Select State" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchStateGroup" type="search" placeholder="Search State Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">
-                                                            {{state.name}}
-                                                        </md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="state_id" value='{{$ctrl.address.state_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    City
-                                                    <sup class="mandatory">*</sup>
-                                                </label>
-                                                <md-select ng-model="$ctrl.address.city_id" placeholder="Select City" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchStateGroup" type="search" placeholder="Search State Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="city.id" ng-repeat="city in $ctrl.city_list | filter:searchTravel">
-                                                            {{city.name}}
-                                                        </md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="city_id" value='{{$ctrl.address.city_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>
-                                                    Pincode
-                                                </label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.address.pincode" name="pincode" placeholder="Enter Pincode" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label class="table-form-list-label">
-                                                    Full Address
-                                                    <span class="mandatory">*</span>
-                                                </label>
-                                                <textarea name="address" ng-model="$ctrl.state.address" class="form-control required" rows="3" placeholder="Enter Address"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane-footer">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <a class="btn btn-secondary btn-prev">
-                                                        Previous
-                                                    </a>
-                                                    <button type="submit" id="submit" class="btn btn-primary">
-                                                        Submit
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div><!-- Tab Footer -->
-                                    </div><!-- Row -->
-                                </div><!-- Tab Pane Wrap -->
-                            </div><!-- Tabe Pane -->
-                        </div><!-- Tab Content -->
-                    </div><!-- Tab Form Body -->
-                </div><!-- Tab Form Wrap -->
-            </div><!-- Page Form -->
+            <input type="hidden" name="id" value="{{$ctrl.region.id}}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-tab-form pb-80">
+                            <div class="tab-form-wrap">
+                                <div class="tab-form-header">
+                                    <div class="tab-header">
+                                        <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                            <ul class="nav nav-pills editDetails-tabs">
+                                                <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                            </ul>
+                                        </div><!-- Filters -->
+                                    </div><!-- Tab Header -->
+                                </div><!-- Tab Form Header -->
+                                <div class="tab-form-body">
+                                    <div class="tab-content">
+                                        <!-- TAB PANEL -->
+                                        <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                            <div class="tab-pane-wrap">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <lable>Region Name<span class="mandatory">*</span></lable>
+                                                            <input type="text" name="name" ng-model='$ctrl.region.name' class="form-control required" placeholder="Enter Region Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <lable>Region Code<span class="mandatory">*</span></lable>
+                                                            <input type="text" name="code" ng-model='$ctrl.region.code' class="form-control required" placeholder="Enter Region Code">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <lable>State<span class="mandatory">*</span></lable>
+                                                            <md-select ng-model="$ctrl.region.state_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select State">
+                                                                <md-select-header class="demo-select-header">
+                                                                    <input ng-model="searchTerm" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text">
+                                                                </md-select-header>
+                                                                <md-optgroup>
+                                                                    <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTerm">{{state.name}}</md-option>
+                                                                </md-optgroup>
+                                                            </md-select>
+                                                            <input type="hidden" class="form-control" name="state_id" id="state_id" value="{{$ctrl.region.state_id}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Active Status<span class="mandatory">*</span></label>
+                                                            <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 2" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                                {{ $ctrl.switch_value }}
+                                                            </md-switch>
+                                                            <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
+                                                        </div><!-- Field -->
+                                                    </div><!-- Column -->
+                                                </div><!-- Row -->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="tab-pane-footer text-right">
+                                                            <!-- <a class="btn btn-grey btn-nxt">Next</a> -->
+                                                            <button type="submit" id="submit" class="btn btn-secondary">Submit</button>
+                                                        </div><!-- Tab Footer -->
+                                                    </div>
+                                                </div><!-- Row -->
+                                            </div><!-- Tab Pane Wrap -->
+                                        </div><!-- Tab Pane -->
+                                    </div><!-- Tab Content -->
+                                </div><!-- Tab Form Body -->
+                            </div><!-- Tab Form Wrap -->
+                        </div><!-- Page Tab Form -->
+                    </div><!-- Column -->
+                </div><!-- Row -->
+            </div><!-- Container -->
         </form>
     </div><!-- Page Main Content -->
 </div><!-- Content Wrap -->
