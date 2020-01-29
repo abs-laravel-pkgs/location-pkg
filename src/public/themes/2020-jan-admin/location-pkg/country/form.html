@@ -38,6 +38,7 @@
                                         <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                             <ul class="nav nav-pills editDetails-tabs">
                                                 <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                                <li ng-if="$ctrl.state_permission"><a data-target="#states" role="tab" data-toggle="tab" aria-expanded="true">States</a></li>
                                             </ul>
                                         </div><!-- Filters -->
                                     </div><!-- Tab Header -->
@@ -62,6 +63,31 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
+                                                            <lable>ISO Code<span class="mandatory">*</span></lable>
+                                                            <input type="text" name="iso_code" ng-model='$ctrl.country.iso_code' class="form-control required" placeholder="Enter ISO Code">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <lable>Mobile Code</lable>
+                                                            <input type="text" name="mobile_code" ng-model='$ctrl.country.mobile_code' class="form-control" placeholder="Eg: +91">
+                                                        </div>
+                                                    </div>
+                                                </div><!-- Row -->
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Has State List<span class="mandatory">*</span></label>
+                                                            <div class="common-radio-button">
+                                                                <input type="radio" id="change-yes" name="has_state_list" value="1" ng-checked="$ctrl.country.has_state_list=='1'">
+                                                                <label for="change-yes">Yes</label>
+                                                                <input type="radio" id="change-no" name="has_state_list" value="0" ng-checked="$ctrl.country.has_state_list!='1'">
+                                                                <label for="change-no">No</label>
+                                                            </div>
+                                                        </div><!-- Field -->
+                                                    </div><!-- column -->
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
                                                             <label>Active Status<span class="mandatory">*</span></label>
                                                             <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 2" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
                                                                 {{ $ctrl.switch_value }}
@@ -73,13 +99,77 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="tab-pane-footer text-right">
-                                                            <!-- <a class="btn btn-grey btn-nxt">Next</a> -->
-                                                            <button type="submit" id="submit" class="btn btn-secondary">Submit</button>
+                                                            <a class="btn btn-grey btn-nxt">Next</a>
+                                                            <button type="submit" class="btn btn-secondary submit">Submit</button>
                                                         </div><!-- Tab Footer -->
                                                     </div>
                                                 </div><!-- Row -->
                                             </div><!-- Tab Pane Wrap -->
                                         </div><!-- Tab Pane -->
+                                        <div class="tab-pane fade" id="states" data-animation="fadeInUp" data-animation-delay="300">
+                                            <div class="form-page">
+                                                <div class="row">
+                                                    <div class="col-lg-9 col-md-8">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-form">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>State Name <sup class="mandatory">*</sup></th>
+                                                                        <th>State Code <sup class="mandatory">*</sup></th>
+                                                                        <th>Active Status <sup class="mandatory">*</sup></th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="(index, state) in $ctrl.state_list">
+                                                                        <input type="hidden" ng-model="state.id" name="states[{{index}}][id]" value="{{state.id}}">
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <input type="text" name="states[{{index}}][name]" ng-model='state.name' class="form-control type-sm required state_name" placeholder="Enter state Name">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <input type="text" name="states[{{index}}][code]" ng-model='state.code' class="form-control type-sm required state_code" placeholder="Enter state Code">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <div class="tab-switch">
+                                                                                    <md-switch ng-model="state.switch_value" aria-label="Switch {{index}}" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                                        {{ state.switch_value }}
+                                                                                    </md-switch>
+                                                                                </div>
+                                                                                <input type="hidden" name="states[{{index}}][status]" value="{{state.switch_value}}">
+                                                                            </div><!-- Field -->
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="javascript:;" ng-click="removestate(index,state.id)"><img src="./public/themes/{{$ctrl.theme}}/img/content/modal/close-circle-active.svg" class="img-fluid" alt="Delete"></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="3">
+                                                                            <button type="button" class="btn btn-primary-light btn-square" ng-click="add_state()">+ Add state</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                            <input type="hidden" name="removed_state_id" id="removed_state_id" value="">
+                                                        </div><!-- Table Responsive -->
+                                                    </div><!-- Column -->
+                                                </div><!-- Row -->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="tab-pane-footer text-right">
+                                                            <a class="btn btn-grey btn-prev">Previous</a>
+                                                            <button type="submit" class="btn btn-secondary submit">Submit</button>
+                                                        </div><!-- Tab Footer -->
+                                                    </div><!-- Column -->
+                                                </div><!-- Row -->
+                                            </div><!-- Tab Pane Wrap -->
+                                        </div><!-- Tabe Pane -->
                                     </div><!-- Tab Content -->
                                 </div><!-- Tab Form Body -->
                             </div><!-- Tab Form Wrap -->

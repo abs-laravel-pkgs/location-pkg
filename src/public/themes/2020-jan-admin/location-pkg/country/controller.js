@@ -25,6 +25,7 @@ app.component('countryList', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element) {
         $scope.loading = true;
         var self = this;
+        self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
         var dataTable = $('#country_list').DataTable({
             "dom": dom_structure,
@@ -48,6 +49,7 @@ app.component('countryList', {
                 data: function(d) {
                     d.country_code = $('#code').val();
                     d.country_name = $('#name').val();
+                    d.iso_code = $('#iso_code').val();
                     d.status = $('#status').val();
                 },
             },
@@ -56,8 +58,9 @@ app.component('countryList', {
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'countries.name' },
                 { data: 'code', name: 'countries.code' },
-                // { data: 'mobile_no', name: 'countrys.mobile_no' },
-                // { data: 'email', name: 'countrys.email' },
+                { data: 'iso_code', name: 'countries.iso_code' },
+                { data: 'mobile_code', name: 'countries.mobile_code' },
+                { data: 'states', name: 'states', searchable: false },
             ],
             "initComplete": function(settings, json) {
                 $('.dataTables_length select').select2();
@@ -140,6 +143,9 @@ app.component('countryList', {
         $('#code').on('keyup', function() {
             datatables.fnFilter();
         });
+        $('#iso_code').on('keyup', function() {
+            datatables.fnFilter();
+        });
         $scope.onSelectedStatus = function(val) {
             $("#status").val(val);
             datatables.fnFilter();
@@ -147,6 +153,7 @@ app.component('countryList', {
         $scope.reset_filter = function() {
             $("#name").val('');
             $("#code").val('');
+            $("#iso_code").val('');
             $("#status").val('');
             datatables.fnFilter();
         }
@@ -162,6 +169,7 @@ app.component('countryForm', {
         //get_form_data_url = typeof($routeParams.id) == 'undefined' ? country_get_form_data_url : country_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        self.state_permission = self.hasPermission('states')
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['getCountryFormData'], {
@@ -170,8 +178,9 @@ app.component('countryForm', {
                 }
             }
         ).then(function(response) {
-            console.log(response);
+            // console.log(response);
             self.country = response.data.country;
+            self.state_list = response.data.state_list;
             self.action = response.data.action;
             self.theme = response.data.theme;
             $rootScope.loading = false;
@@ -185,6 +194,22 @@ app.component('countryForm', {
                 self.switch_value = 'Active';
             }
         });
+
+        //ADD STATE
+        $scope.add_state = function() {
+            self.state_list.push({
+                switch_value: 'Active',
+            });
+        }
+        //REMOVE STATE
+        self.remove_state_id = [];
+        $scope.removestate = function(index, state_id) {
+            if (state_id) {
+                self.remove_state_id.push(state_id);
+                $("#removed_state_id").val(JSON.stringify(self.remove_state_id));
+            }
+            self.state_list.splice(index, 1);
+        }
 
         /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
@@ -201,6 +226,19 @@ app.component('countryForm', {
         $scope.btnNxt = function() {}
         $scope.prev = function() {}
 
+
+        //VALIDATEOR FOR MULTIPLE 
+        jQuery.validator.addClassRules("state_name", {
+            required: true,
+            minlength: 3,
+            maxlength: 191,
+        });
+        jQuery.validator.addClassRules("state_code", {
+            required: true,
+            minlength: 1,
+            maxlength: 2,
+        });
+
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -215,13 +253,21 @@ app.component('countryForm', {
                     minlength: 3,
                     maxlength: 64,
                 },
+                'iso_code': {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 3,
+                },
+                'mobile_code': {
+                    maxlength: 10,
+                },
             },
             invalidHandler: function(event, validator) {
                 custom_noty('error', 'You have errors,Please check all tabs');
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
-                $('#submit').button('loading');
+                $('.submit').button('loading');
                 $.ajax({
                         url: laravel_routes['saveCountry'],
                         method: "POST",
@@ -236,21 +282,21 @@ app.component('countryForm', {
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
-                                $('#submit').button('reset');
+                                $('.submit').button('reset');
                                 var errors = '';
                                 for (var i in res.errors) {
                                     errors += '<li>' + res.errors[i] + '</li>';
                                 }
                                 custom_noty('error', errors);
                             } else {
-                                $('#submit').button('reset');
+                                $('.submit').button('reset');
                                 $location.path('/location-pkg/country/list');
                                 $scope.$apply();
                             }
                         }
                     })
                     .fail(function(xhr) {
-                        $('#submit').button('reset');
+                        $('.submit').button('reset');
                         custom_noty('error', 'Something went wrong at server');
                     });
             }
@@ -264,6 +310,7 @@ app.component('countryView', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        self.state_permission = self.hasPermission('states');
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['viewCountry'], {
@@ -274,8 +321,24 @@ app.component('countryView', {
         ).then(function(response) {
             // console.log(response);
             self.country = response.data.country;
+            self.states = response.data.state_list;
             self.action = response.data.action;
             self.theme = response.data.theme;
         });
+
+        /* Tab Funtion */
+        $('.btn-nxt').on("click", function() {
+            $('.editDetails-tabs li.active').next().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        $('.btn-prev').on("click", function() {
+            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        $('.btn-pills').on("click", function() {
+            tabPaneFooter();
+        });
+        $scope.btnNxt = function() {}
+        $scope.prev = function() {}
     }
 });

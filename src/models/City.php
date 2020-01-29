@@ -18,6 +18,12 @@ class City extends Model {
 		'state_id',
 	];
 
+	protected $appends = ['switch_value'];
+
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	}
+
 	public function state() {
 		return $this->belongsTo('Abs\LocationPkg\State');
 	}

@@ -50,14 +50,15 @@ app.component('stateList', {
                     d.state_code = $('#code').val();
                     d.state_name = $('#name').val();
                     d.status = $('#status').val();
-                    d.country_id = $('#country_id').val();
+                    d.filter_country_id = $('#filter_country_id').val();
                 },
             },
             columns: [
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'states.name' },
                 { data: 'code', name: 'states.code' },
-                { data: 'regions', name: 'regions.id', searchable: false },
+                { data: 'regions', name: 'regions', searchable: false },
+                // { data: 'cities', name: 'cities', searchable: false },
                 { data: 'country_name', name: 'countries.name' },
                 { data: 'country_code', name: 'countries.code' },
             ],
@@ -113,7 +114,7 @@ app.component('stateList', {
             ).then(function(response) {
                 if (response.data.success) {
                     custom_noty('success', 'State Deleted Successfully');
-                    $('#state_list').DataTable().ajax.reload(function(json) {});
+                    $('#state_list').DataTable().ajax.reload();
                     $location.path('/location-pkg/state/list');
                 }
             });
@@ -153,13 +154,13 @@ app.component('stateList', {
             datatables.fnFilter();
         }
         $scope.onSelectedCountry = function(val) {
-            $("#country_id").val(val);
+            $("#filter_country_id").val(val);
             datatables.fnFilter();
         }
         $scope.reset_filter = function() {
             $("#name").val('');
             $("#code").val('');
-            $("#country_id").val('');
+            $("#filter_country_id").val('');
             $("#status").val('');
             datatables.fnFilter();
         }
@@ -175,6 +176,8 @@ app.component('stateForm', {
         //get_form_data_url = typeof($routeParams.id) == 'undefined' ? state_get_form_data_url : state_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        self.region_permission = self.hasPermission('regions');
+        self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['getStateFormData'], {
@@ -187,6 +190,7 @@ app.component('stateForm', {
             self.state = response.data.state;
             self.country_list = response.data.country_list;
             self.region_list = response.data.region_list;
+            self.city_list = response.data.city_list;
             self.action = response.data.action;
             self.theme = response.data.theme;
             $rootScope.loading = false;
@@ -233,6 +237,41 @@ app.component('stateForm', {
             }
             self.region_list.splice(index, 1);
         }
+
+        //ADD CITIES
+        $scope.add_city = function() {
+            self.city_list.push({
+                switch_value: 'Active',
+            });
+        }
+        //REMOVE CITIES
+        self.city_list_id = [];
+        $scope.removeCity = function(index, city_id) {
+            if (city_id) {
+                self.city_list_id.push(city_id);
+                $('#removed_city_id').val(JSON.stringify(self.city_list_id));
+            }
+            self.city_list.splice(index, 1);
+        }
+
+        //MULTIPLE VALIDATION FOR REGION
+        jQuery.validator.addClassRules('region_code', {
+            required: true,
+            minlength: 1,
+            maxlength: 4,
+        });
+        jQuery.validator.addClassRules('region_name', {
+            required: true,
+            minlength: 3,
+            maxlength: 191,
+        });
+
+        //MULTIPLE VALIDATION FOR CITY
+        jQuery.validator.addClassRules('city_name', {
+            required: true,
+            minlength: 3,
+            maxlength: 191,
+        });
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({
@@ -300,6 +339,8 @@ app.component('stateView', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        self.region_permission = self.hasPermission('regions');
+        self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['viewState'], {
@@ -311,6 +352,7 @@ app.component('stateView', {
             console.log(response);
             self.state = response.data.state;
             self.regions = response.data.regions;
+            self.cities = response.data.cities;
             self.action = response.data.action;
             self.theme = response.data.theme;
         });

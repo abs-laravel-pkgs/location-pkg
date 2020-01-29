@@ -5,7 +5,9 @@
                 <th class="actions">Action</th>
                 <th>Country Name</th>
                 <th>Country Code</th>
-                <!-- <th>Status</th> -->
+                <th>ISO Code</th>
+                <th>Mobile Code</th>
+                <th>States</th>
             </tr>
         </thead>
     </table><!-- Table -->
@@ -20,7 +22,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="btn btn-colse btn-img btn-filter-close" data-dismiss="modal" aria-label="Close">
-                    <img src="./public/img/content/modal/close-circle.svg" alt="Modal" class="img-responsive" onmouseover="this.src='./public/img/content/modal/close-circle-active.svg'" onmouseout="this.src='./public/img/content/modal/close-circle.svg'">
+                    <img src="./public/themes/{{$ctrl.theme}}/img/content/modal/close-circle.svg" alt="Modal" class="img-responsive" onmouseover="this.src='./public/img/content/modal/close-circle-active.svg'" onmouseout="this.src='./public/img/content/modal/close-circle.svg'">
                 </button>
                 <h5 class="modal-title">Filter</h5>
                 <div class="filter-reset">
@@ -39,6 +41,14 @@
                         <div class="input-text form-group">
                             <label>Country Code</label>
                             <input type="text" class="form-control" name="code" id="code" placeholder="Enter Country Code" aria-invalid="false" autocomplete="off">
+                        </div><!-- Field -->
+                    </div><!-- Column -->
+                </div>
+                <div class="row modal-row">
+                    <div class="col-md-6">
+                        <div class="input-text form-group">
+                            <label>ISO Code</label>
+                            <input type="text" class="form-control" name="iso_code" id="iso_code" placeholder="Enter ISO Code" aria-invalid="false" autocomplete="off">
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-6">

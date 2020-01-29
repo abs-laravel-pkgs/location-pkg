@@ -5,6 +5,7 @@ namespace Abs\LocationPkg;
 use Abs\HelperPkg\Traits\SeederTrait;
 use App\Company;
 use App\Config;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,11 +20,17 @@ class State extends Model {
 		'country_id',
 	];
 
+	protected $appends = ['switch_value'];
+
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	}
+
 	public function country() {
 		return $this->belongsTo('Abs\LocationPkg\Country');
 	}
 	public function region() {
-		return $this->hasMany('Abs\LocationPkg\Region');
+		return $this->hasMany('Abs\LocationPkg\Region')->where('company_id', Auth::user()->company_id);
 	}
 
 	public static function getStates($params) {

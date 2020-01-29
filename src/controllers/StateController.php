@@ -33,10 +33,12 @@ class StateController extends Controller {
 				'countries.name as country_name',
 				'countries.code as country_code',
 				DB::raw('COUNT(regions.id) as regions'),
+				// DB::raw('COUNT(cities.id) as cities'),
 				DB::raw('IF(states.deleted_at IS NULL,"Active","Inactive") as status')
 			)
 			->join('countries', 'states.country_id', 'countries.id')
-			->leftjoin('regions', 'states.id', 'regions.state_id')
+			->join('regions', 'states.id', 'regions.state_id')
+		// ->join('cities', 'states.id', 'cities.state_id')
 			->where(function ($query) use ($request) {
 				if (!empty($request->state_code)) {
 					$query->where('states.code', 'LIKE', '%' . $request->state_code . '%');
@@ -48,8 +50,8 @@ class StateController extends Controller {
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->country_id)) {
-					$query->where('states.country_id', $request->country_id);
+				if (!empty($request->filter_country_id)) {
+					$query->where('states.country_id', $request->filter_country_id);
 				}
 			})
 			->where(function ($query) use ($request) {
@@ -59,11 +61,12 @@ class StateController extends Controller {
 					$query->whereNotNull('states.deleted_at');
 				}
 			})
+			->where('regions.company_id', Auth::user()->company_id)
 			->groupBy('states.id')
 			->orderBy('states.id', 'desc')
 		// ->get()
 		;
-
+		// dd($states);
 		return Datatables::of($states)
 			->addColumn('name', function ($state) {
 				$status = $state->status == 'Active' ? 'green' : 'red';
@@ -107,10 +110,12 @@ class StateController extends Controller {
 			$state = new State;
 			$action = 'Add';
 			$this->data['region_list'] = [];
+			$this->data['city_list'] = [];
 		} else {
 			$state = State::withTrashed()->find($id);
 			$action = 'Edit';
 			$this->data['region_list'] = Region::withTrashed()->where('state_id', $request->id)->get();
+			$this->data['city_list'] = City::withTrashed()->where('state_id', $request->id)->get();
 		}
 		$this->data['country_list'] = collect(Country::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select Country']));
 		$this->data['state'] = $state;
@@ -125,6 +130,7 @@ class StateController extends Controller {
 			'country',
 		])->find($request->id);
 		$this->data['regions'] = $regions = Region::withTrashed()->where('state_id', $request->id)->get();
+		$this->data['cities'] = $cities = City::withTrashed()->where('state_id', $request->id)->get();
 		$this->data['action'] = 'View';
 		$this->data['theme'];
 
@@ -134,21 +140,38 @@ class StateController extends Controller {
 	public function saveState(Request $request) {
 		// dd($request->all());
 		try {
+			//REMOVE REGIONS
 			if (!empty($request->removed_region_id)) {
 				$remove_region_ids = json_decode($request->removed_region_id);
 				$remove_region = Region::withTrashed()->whereIn('id', $remove_region_ids)->forceDelete();
 			}
 
-			//VALIDATION FOR UNIQUE
+			//REMOVE CITIES
+			if (!empty($request->removed_city_id)) {
+				$remove_city_ids = json_decode($request->removed_city_id);
+				$remove_city = City::withTrashed()->whereIn('id', $remove_city_ids)->forceDelete();
+			}
+
+			//VALIDATION FOR UNIQUE FOR REGION
 			if (!empty($request->regions)) {
 				$regions_name = array_column($request->regions, 'name');
 				$regions_code = array_column($request->regions, 'code');
-				$regions_name_count = count($regions_name);
-				$region_name_unique_count = count(array_unique($regions_name));
-				$regions_code_count = count($regions_code);
-				$region_code_unique_count = count(array_unique($regions_code));
+				$regions_name_count = count(array_map('strtolower', $regions_name));
+				$region_name_unique_count = count(array_unique(array_map('strtolower', $regions_name)));
+				$regions_code_count = count(array_map('strtolower', $regions_code));
+				$region_code_unique_count = count(array_unique(array_map('strtolower', $regions_code)));
 				if (($regions_name_count != $region_name_unique_count) || ($regions_code_count != $region_code_unique_count)) {
-					return response()->json(['success' => false, 'errors' => ['Remove Duplicate Value!']]);
+					return response()->json(['success' => false, 'errors' => ['Remove Duplicate Value in Regions!']]);
+				}
+			}
+
+			//VALIDATION FOR UNIQUE FOR CITY
+			if (!empty($request->cities)) {
+				$cities_name = array_column($request->cities, 'name');
+				$cities_name_count = count(array_map('strtolower', $cities_name));
+				$cities_name_unique_count = count(array_unique(array_map('strtolower', $cities_name)));
+				if ($cities_name_count != $cities_name_unique_count) {
+					return response()->json(['success' => false, 'errors' => ['Remove Duplicate Values in Cities!']]);
 				}
 			}
 
@@ -215,6 +238,28 @@ class StateController extends Controller {
 					}
 				}
 			}
+			//REGIONS VALIDATION
+			$error_messages2 = [
+				'name.required' => 'City Name is Required',
+				'name.max' => 'City Name Maximum 191 Characters',
+				'name.min' => 'City Name Minimum 3 Characters',
+				'name.unique' => 'City Name is already taken',
+			];
+			if (!empty($request->cities)) {
+				foreach ($request->cities as $city) {
+					$validator = Validator::make($city, [
+						'name' => [
+							'required:true',
+							'max:191',
+							'min:3',
+							'unique:cities,name,' . $city['id'] . ',id,state_id,' . $request->id,
+						],
+					], $error_messages2);
+					if ($validator->fails()) {
+						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
+					}
+				}
+			}
 
 			DB::beginTransaction();
 			if (!$request->id) {
@@ -238,7 +283,6 @@ class StateController extends Controller {
 			$state->save();
 
 			//ADD REGIONS
-			// dd($request->regions);
 			if (!empty($request->regions)) {
 				foreach ($request->regions as $region_data) {
 
@@ -264,6 +308,33 @@ class StateController extends Controller {
 					$region->company_id = Auth::user()->company_id;
 					$region->state_id = $state->id;
 					$region->save();
+				}
+			}
+
+			//ADD CITIES
+			if (!empty($request->cities)) {
+				foreach ($request->cities as $city_data) {
+
+					if (!$city_data['id']) {
+						$city = new City;
+						$city->created_by_id = Auth::user()->id;
+						$city->created_at = Carbon::now();
+						$city->updated_at = NULL;
+					} else {
+						$city = City::withTrashed()->find($city_data['id']);
+						$city->updated_by_id = Auth::user()->id;
+						$city->updated_at = Carbon::now();
+					}
+					if ($city_data['status'] == 'Inactive') {
+						$city->deleted_by_id = Auth::user()->id;
+						$city->deleted_at = Carbon::now();
+					} else {
+						$city->deleted_by_id = NULL;
+						$city->deleted_at = NULL;
+					}
+					$city->name = $city_data['name'];
+					$city->state_id = $state->id;
+					$city->save();
 				}
 			}
 

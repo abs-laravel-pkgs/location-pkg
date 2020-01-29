@@ -16,6 +16,9 @@ class Country extends Model {
 	protected $fillable = [
 		'code',
 		'name',
+		'iso_code',
+		'has_state_list',
+		'mobile_code',
 	];
 
 	public static function getCountries() {
