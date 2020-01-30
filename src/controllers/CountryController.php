@@ -131,12 +131,12 @@ class CountryController extends Controller {
 			if (!empty($request->states)) {
 				$states_name = array_column($request->states, 'name');
 				$states_code = array_column($request->states, 'code');
-				$states_name_count = count($states_name);
-				$state_name_unique_count = count(array_unique($states_name));
-				$states_code_count = count($states_code);
-				$state_code_unique_count = count(array_unique($states_code));
+				$states_name_count = count(array_map('strtolower', $states_name));
+				$state_name_unique_count = count(array_unique(array_map('strtolower', $states_name)));
+				$states_code_count = count(array_map('strtolower', $states_code));
+				$state_code_unique_count = count(array_unique(array_map('strtolower', $states_code)));
 				if (($states_name_count != $state_name_unique_count) || ($states_code_count != $state_code_unique_count)) {
-					return response()->json(['success' => false, 'errors' => ['Remove Duplicate Value!']]);
+					return response()->json(['success' => false, 'errors' => ['Remove Duplicate Value in States!']]);
 				}
 			}
 			$error_messages = [
