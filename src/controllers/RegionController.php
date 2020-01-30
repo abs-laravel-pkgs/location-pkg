@@ -48,8 +48,8 @@ class RegionController extends Controller {
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_id)) {
-					$query->where('regions.state_id', $request->state_id);
+				if (!empty($request->filter_state_id)) {
+					$query->where('regions.state_id', $request->filter_state_id);
 				}
 			})
 			->where(function ($query) use ($request) {

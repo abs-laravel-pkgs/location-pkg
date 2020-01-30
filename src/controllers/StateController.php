@@ -32,13 +32,16 @@ class StateController extends Controller {
 				'states.code',
 				'countries.name as country_name',
 				'countries.code as country_code',
-				DB::raw('COUNT(regions.id) as regions'),
-				// DB::raw('COUNT(cities.id) as cities'),
+				DB::raw('COUNT(DISTINCT(regions.id)) as regions_count'),
+				DB::RAW('count(DISTINCT(cities.id)) as cities_count'),
 				DB::raw('IF(states.deleted_at IS NULL,"Active","Inactive") as status')
 			)
 			->join('countries', 'states.country_id', 'countries.id')
-			->join('regions', 'states.id', 'regions.state_id')
-		// ->join('cities', 'states.id', 'cities.state_id')
+			->leftJoin('regions', function ($join) {
+				$join->on('regions.state_id', 'states.id')
+					->where('regions.company_id', Auth::user()->company_id);
+			})
+			->leftJoin('cities', 'states.id', 'cities.state_id')
 			->where(function ($query) use ($request) {
 				if (!empty($request->state_code)) {
 					$query->where('states.code', 'LIKE', '%' . $request->state_code . '%');
@@ -61,7 +64,6 @@ class StateController extends Controller {
 					$query->whereNotNull('states.deleted_at');
 				}
 			})
-			->where('regions.company_id', Auth::user()->company_id)
 			->groupBy('states.id')
 			->orderBy('states.id', 'desc')
 		// ->get()
@@ -354,5 +356,10 @@ class StateController extends Controller {
 		if ($delete_status) {
 			return response()->json(['success' => true]);
 		}
+	}
+
+	public function getStateBasedCountry(Request $request) {
+		$this->data['state_list'] = $state_list = State::getStates($request->all());
+		return response()->json($this->data);
 	}
 }

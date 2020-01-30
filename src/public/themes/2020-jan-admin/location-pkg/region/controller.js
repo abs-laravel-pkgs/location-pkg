@@ -39,6 +39,7 @@ app.component('regionList', {
                 },
             },
             processing: true,
+            "ordering": false,
             serverSide: true,
             paging: true,
             stateSave: true,
@@ -49,7 +50,7 @@ app.component('regionList', {
                 data: function(d) {
                     d.region_code = $('#code').val();
                     d.region_name = $('#name').val();
-                    d.state_id = $('#state_id').val();
+                    d.filter_state_id = $('#filter_state_id').val();
                     d.status = $('#status').val();
                 },
             },
@@ -153,14 +154,14 @@ app.component('regionList', {
             dataTables.fnFilter();
         }
         $scope.onSelectedState = function(val) {
-            $("#state_id").val(val);
+            $("#filter_state_id").val(val);
             dataTables.fnFilter();
         }
         $scope.reset_filter = function() {
             $("#name").val('');
             $("#code").val('');
             $("#status").val('');
-            $("#state_id").val('');
+            $("#filter_state_id").val('');
             dataTables.fnFilter();
         }
 

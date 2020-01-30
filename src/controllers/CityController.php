@@ -19,7 +19,8 @@ class CityController extends Controller {
 	}
 
 	public function getCityFilter() {
-		$this->data['state_list'] = collect(State::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select State']));
+		$this->data['country_list'] = collect(Country::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select Country']));
+		// $this->data['state_list'] = collect(State::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select State']));
 		$this->data['theme'];
 
 		return response()->json($this->data);
@@ -44,8 +45,13 @@ class CityController extends Controller {
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->state_id)) {
-					$query->where('cities.state_id', $request->state_id);
+				if (!empty($request->filter_state_id)) {
+					$query->where('cities.state_id', $request->filter_state_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->country_id)) {
+					$query->where('countries.id', $request->country_id);
 				}
 			})
 			->where(function ($query) use ($request) {

@@ -42,6 +42,7 @@ app.component('stateList', {
             serverSide: true,
             paging: true,
             stateSave: true,
+            "ordering": false,
             ajax: {
                 url: laravel_routes['getStateList'],
                 type: "GET",
@@ -57,8 +58,8 @@ app.component('stateList', {
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'states.name' },
                 { data: 'code', name: 'states.code' },
-                { data: 'regions', name: 'regions', searchable: false },
-                // { data: 'cities', name: 'cities', searchable: false },
+                { data: 'regions_count', name: 'regions', searchable: false },
+                { data: 'cities_count', name: 'cities', searchable: false },
                 { data: 'country_name', name: 'countries.name' },
                 { data: 'country_code', name: 'countries.code' },
             ],
@@ -201,7 +202,6 @@ app.component('stateForm', {
                     self.switch_value = 'Active';
                 }
             } else {
-                $scope.add_region();
                 self.switch_value = 'Active';
             }
         });
@@ -349,7 +349,7 @@ app.component('stateView', {
                 }
             }
         ).then(function(response) {
-            console.log(response);
+            // console.log(response);
             self.state = response.data.state;
             self.regions = response.data.regions;
             self.cities = response.data.cities;

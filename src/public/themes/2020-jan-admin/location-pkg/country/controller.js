@@ -22,7 +22,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.component('countryList', {
     templateUrl: country_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
         self.theme = admin_theme;
@@ -38,6 +38,7 @@ app.component('countryList', {
                     "previous": '<i class="icon ion-ios-arrow-back"></i>'
                 },
             },
+            "ordering": false,
             processing: true,
             serverSide: true,
             paging: true,

@@ -101,6 +101,11 @@
                                                                         <span class="info">{{region.deleted_at ? 'Inactive' : 'Active'}}</span>
                                                                     </td>
                                                                 </tr>
+                                                                <tr ng-if="$ctrl.regions.length == 0">
+                                                                    <td colspan="3" style="text-align: center;">
+                                                                        <span class="info">No data available in table</span>
+                                                                    </td>
+                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div><!-- Table Responsive -->
@@ -135,6 +140,11 @@
                                                                     </td>
                                                                     <td>
                                                                         <span class="info">{{city.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr ng-if="$ctrl.cities.length == 0">
+                                                                    <td colspan="2" style="text-align: center;">
+                                                                        <span class="info">No data available in table</span>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>

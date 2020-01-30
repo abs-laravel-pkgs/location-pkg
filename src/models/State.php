@@ -38,7 +38,7 @@ class State extends Model {
 		if ($params['country_id']) {
 			$query->where('country_id', $params['country_id']);
 		}
-		$state_list = $query->get();
+		$state_list = collect($query->get()->prepend(['id' => '', 'name' => 'Select State']));
 
 		return $state_list;
 	}

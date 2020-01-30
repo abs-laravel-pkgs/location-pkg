@@ -27,7 +27,7 @@
                 </button>
                 <h5 class="modal-title">Filter</h5>
                 <div class="filter-reset">
-                    <p class="text-red" ng-click="reset_filter(); $ctrl.city.status=''">Reset Filter</p>
+                    <p class="text-red" ng-click="reset_filter(); $ctrl.city.status='';$ctrl.city.country_id='';$ctrl.city.state_id=''">Reset Filter</p>
                 </div>
             </div><!-- Modal Header -->
             <div class="modal-body modal-sm-body">
@@ -40,17 +40,31 @@
                     </div><!-- Column -->
                     <div class="col-md-6">
                         <div class="input-text form-group">
+                            <label>Country</label>
+                            <md-select ng-model="$ctrl.city.country_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCountry($ctrl.city.country_id)" placeholder="Select ">
+                                <md-select-header class="demo-select-header">
+                                    <input ng-model="searchTerm" type="search" placeholder="Search for a Country" class="demo-header-searchbox md-text">
+                                </md-select-header>
+                                <md-optgroup>
+                                    <md-option ng-value="country.id" ng-repeat="country in $ctrl.country_list | filter:searchTerm">{{country.name}}</md-option>
+                                </md-optgroup>
+                            </md-select>
+                            <input type="hidden" class="form-control" name="country_id" id="country_id" value="">
+                        </div><!-- Field -->
+                    </div><!-- Column -->
+                    <div class="col-md-6">
+                        <div class="input-text form-group">
                             <label>State</label>
                             <md-select ng-model="$ctrl.city.state_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.city.state_id)" placeholder="Select ">
                                 <md-select-header class="demo-select-header">
-                                    <input ng-model="searchTerm" type="search" placeholder="Search for a Country" class="demo-header-searchbox md-text">
+                                    <input ng-model="searchTerm" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text">
                                 </md-select-header>
                                 <!-- <md-tooltip>{{selectedPriceComponentName($ctrl.price_components.id)}}</md-tooltip> -->
                                 <md-optgroup>
                                     <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTerm">{{state.name}}</md-option>
                                 </md-optgroup>
                             </md-select>
-                            <input type="hidden" class="form-control" name="state_id" id="state_id" value="">
+                            <input type="hidden" class="form-control" name="filter_state_id" id="filter_state_id" value="">
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-6">

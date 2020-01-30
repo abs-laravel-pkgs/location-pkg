@@ -40,6 +40,7 @@ app.component('cityList', {
             processing: true,
             serverSide: true,
             paging: true,
+            "ordering": false,
             stateSave: true,
             ajax: {
                 url: laravel_routes['getCityList'],
@@ -47,7 +48,8 @@ app.component('cityList', {
                 dataType: "json",
                 data: function(d) {
                     d.city_name = $('#name').val();
-                    d.state_id = $('#state_id').val();
+                    d.filter_state_id = $('#filter_state_id').val();
+                    d.country_id = $('#country_id').val();
                     d.status = $('#status').val();
                 },
             },
@@ -123,7 +125,7 @@ app.component('cityList', {
             laravel_routes['getCityFilter']
         ).then(function(response) {
             // console.log(response);
-            self.state_list = response.data.state_list;
+            self.country_list = response.data.country_list;
         });
         self.status = [
             { id: '', name: 'Select Status' },
@@ -140,6 +142,29 @@ app.component('cityList', {
             }
         });
 
+        //SELECT STATE BASED COUNTRY
+        $scope.onSelectedCountry = function(id) {
+            if (id) {
+                self.state_list = [];
+                $("#country_id").val(id);
+                datatables.fnFilter();
+                $http.get(
+                    laravel_routes['getStateBasedCountry'], {
+                        params: {
+                            country_id: id,
+                        }
+                    }
+                ).then(function(response) {
+                    angular.forEach(response.data.state_list, function(value, key) {
+                        self.state_list.push({
+                            id: value.id,
+                            name: value.name,
+                        });
+                    });
+                });
+            }
+        }
+
         var datatables = $('#city_list').dataTable();
         $('#name').on('keyup', function() {
             datatables.fnFilter();
@@ -149,14 +174,14 @@ app.component('cityList', {
             datatables.fnFilter();
         }
         $scope.onSelectedState = function(val) {
-            $("#state_id").val(val);
+            $("#filter_state_id").val(val);
             datatables.fnFilter();
         }
         $scope.reset_filter = function() {
             $("#name").val('');
             $("#code").val('');
             $("#status").val('');
-            $("#state_id").val('');
+            $("#filter_state_id").val('');
             datatables.fnFilter();
         }
 
