@@ -57,11 +57,10 @@
                             <label>State</label>
                             <md-select ng-model="$ctrl.city.state_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.city.state_id)" placeholder="Select ">
                                 <md-select-header class="demo-select-header">
-                                    <input ng-model="searchTerm" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text">
+                                    <input ng-model="searchTerm1" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text">
                                 </md-select-header>
-                                <!-- <md-tooltip>{{selectedPriceComponentName($ctrl.price_components.id)}}</md-tooltip> -->
                                 <md-optgroup>
-                                    <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTerm">{{state.name}}</md-option>
+                                    <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTerm1">{{state.name}}</md-option>
                                 </md-optgroup>
                             </md-select>
                             <input type="hidden" class="form-control" name="filter_state_id" id="filter_state_id" value="">
@@ -72,11 +71,10 @@
                             <label>Status</label>
                             <md-select ng-model="$ctrl.city.status" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedStatus($ctrl.city.status)" placeholder="Select Status">
                                 <md-select-header class="demo-select-header">
-                                    <input ng-model="searchTerm" type="search" placeholder="Search for a Status" class="demo-header-searchbox md-text">
+                                    <input ng-model="searchTerm2" type="search" placeholder="Search for a Status" class="demo-header-searchbox md-text">
                                 </md-select-header>
-                                <!-- <md-tooltip>{{selectedPriceComponentName($ctrl.price_components.id)}}</md-tooltip> -->
                                 <md-optgroup>
-                                    <md-option ng-value="status.id" ng-repeat="status in $ctrl.status | filter:searchTerm">{{status.name}}</md-option>
+                                    <md-option ng-value="status.id" ng-repeat="status in $ctrl.status | filter:searchTerm2">{{status.name}}</md-option>
                                 </md-optgroup>
                             </md-select>
                             <input type="hidden" class="form-control" name="status" id="status" value="">
