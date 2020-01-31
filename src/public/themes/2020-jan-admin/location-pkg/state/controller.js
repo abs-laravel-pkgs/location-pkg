@@ -136,6 +136,10 @@ app.component('stateList', {
         $element.find('input').on('keydown', function(ev) {
             ev.stopPropagation();
         });
+        $scope.clearSearchTerm = function() {
+            $scope.searchTerm = '';
+            $scope.searchTerm1 = '';
+        };
         /* Modal Md Select Hide */
         $('.modal').bind('click', function(event) {
             if ($('.md-select-menu-container').hasClass('md-active')) {
