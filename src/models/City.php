@@ -28,6 +28,16 @@ class City extends Model {
 		return $this->belongsTo('Abs\LocationPkg\State');
 	}
 
+	public static function getCities($params) {
+		$query = City::select('id', 'name', 'state_id')->orderBy('name');
+		if ($params['state_id']) {
+			$query->where('state_id', $params['state_id']);
+		}
+		$city_list = collect($query->get()->prepend(['id' => '', 'name' => 'Select City']));
+
+		return $city_list;
+	}
+
 	public static function createFromObject($record_data) {
 
 		$errors = [];
