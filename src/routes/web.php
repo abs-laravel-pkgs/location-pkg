@@ -35,5 +35,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 
 	//GET STATE BASED COUNTRY
 	Route::get('/states/get-state', 'StateController@getStateBasedCountry')->name('getStateBasedCountry');
+	//GET CITY BASED STATE
+	Route::get('/city/get-city', 'CityController@getCityBasedState')->name('getCityBasedState');
 
 });

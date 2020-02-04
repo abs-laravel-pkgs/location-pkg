@@ -186,4 +186,9 @@ class CityController extends Controller {
 			return response()->json(['success' => true]);
 		}
 	}
+
+	public function getCityBasedState(Request $request) {
+		$this->data['city_list'] = $city_list = City::getCities($request->all());
+		return response()->json($this->data);
+	}
 }

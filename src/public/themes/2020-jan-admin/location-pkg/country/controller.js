@@ -130,6 +130,9 @@ app.component('countryList', {
         $element.find('input').on('keydown', function(ev) {
             ev.stopPropagation();
         });
+        $scope.clearSearchTerm = function() {
+            $scope.searchTerm = '';
+        };
         /* Modal Md Select Hide */
         $('.modal').bind('click', function(event) {
             if ($('.md-select-menu-container').hasClass('md-active')) {
