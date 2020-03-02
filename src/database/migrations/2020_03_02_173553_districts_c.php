@@ -4,19 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CitiesC extends Migration {
+class DistrictsC extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		if (!Schema::hasTable('cities')) {
-
-			Schema::create('cities', function (Blueprint $table) {
+		if (!Schema::hasTable('districts')) {
+			Schema::create('districts', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('state_id');
 				$table->string('name', 191);
+				$table->string('short_name', 24)->nullable();
+				$table->string('code', 16)->nullable();
 				$table->unsignedInteger('created_by_id')->nullable();
 				$table->unsignedInteger('updated_by_id')->nullable();
 				$table->unsignedInteger('deleted_by_id')->nullable();
@@ -25,7 +26,13 @@ class CitiesC extends Migration {
 
 				$table->foreign('state_id')->references('id')->on('states')->onDelete('CASCADE')->onUpdate('cascade');
 
-				$table->unique(["name", "state_id"]);
+				$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+				$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+				$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+
+				$table->unique(["state_id", "name"]);
+				$table->unique(["state_id", "short_name"]);
+				$table->unique(["state_id", "code"]);
 			});
 		}
 	}
@@ -36,6 +43,6 @@ class CitiesC extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('cities');
+		Schema::dropIfExists('districts');
 	}
 }

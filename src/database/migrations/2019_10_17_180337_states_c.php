@@ -11,22 +11,24 @@ class StatesC extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('states', function (Blueprint $table) {
-			$table->increments('id');
-			$table->unsignedInteger('country_id');
-			$table->string('code', 2);
-			$table->string('name', 191);
-			$table->unsignedInteger('created_by_id')->nullable();
-			$table->unsignedInteger('updated_by_id')->nullable();
-			$table->unsignedInteger('deleted_by_id')->nullable();
-			$table->timestamps();
-			$table->softDeletes();
+		if (!Schema::hasTable('states')) {
+			Schema::create('states', function (Blueprint $table) {
+				$table->increments('id');
+				$table->unsignedInteger('country_id');
+				$table->string('code', 2);
+				$table->string('name', 191);
+				$table->unsignedInteger('created_by_id')->nullable();
+				$table->unsignedInteger('updated_by_id')->nullable();
+				$table->unsignedInteger('deleted_by_id')->nullable();
+				$table->timestamps();
+				$table->softDeletes();
 
-			$table->foreign('country_id')->references('id')->on('countries')->onDelete('CASCADE')->onUpdate('cascade');
+				$table->foreign('country_id')->references('id')->on('countries')->onDelete('CASCADE')->onUpdate('cascade');
 
-			$table->unique(["country_id", "code"]);
-			$table->unique(["country_id", "name"]);
-		});
+				$table->unique(["country_id", "code"]);
+				$table->unique(["country_id", "name"]);
+			});
+		}
 	}
 
 	/**

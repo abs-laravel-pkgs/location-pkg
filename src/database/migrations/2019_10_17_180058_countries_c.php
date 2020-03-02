@@ -11,22 +11,25 @@ class CountriesC extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('countries', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('code', 2);
-			$table->string('iso_code', 3);
-			$table->string('name', 64);
-			$table->boolean('has_state_list')->default(0);
-			$table->unsignedInteger('created_by_id')->nullable();
-			$table->unsignedInteger('updated_by_id')->nullable();
-			$table->unsignedInteger('deleted_by_id')->nullable();
-			$table->timestamps();
-			$table->softDeletes();
+		if (!Schema::hasTable('countries')) {
 
-			$table->unique(["code"]);
-			$table->unique(["iso_code"]);
-			$table->unique(["name"]);
-		});
+			Schema::create('countries', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('code', 2);
+				$table->string('iso_code', 3);
+				$table->string('name', 64);
+				$table->boolean('has_state_list')->default(0);
+				$table->unsignedInteger('created_by_id')->nullable();
+				$table->unsignedInteger('updated_by_id')->nullable();
+				$table->unsignedInteger('deleted_by_id')->nullable();
+				$table->timestamps();
+				$table->softDeletes();
+
+				$table->unique(["code"]);
+				$table->unique(["iso_code"]);
+				$table->unique(["name"]);
+			});
+		}
 	}
 
 	/**
