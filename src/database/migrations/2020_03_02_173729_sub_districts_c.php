@@ -30,9 +30,9 @@ class SubDistrictsC extends Migration {
 				$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 				$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 
-				$table->unique(["state_id", "name"]);
-				$table->unique(["state_id", "short_name"]);
-				$table->unique(["state_id", "code"]);
+				$table->unique(["district_id", "name"]);
+				$table->unique(["district_id", "short_name"]);
+				$table->unique(["district_id", "code"]);
 			});
 		}
 	}
