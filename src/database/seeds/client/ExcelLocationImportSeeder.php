@@ -8,6 +8,6 @@ class ExcelLocationImportSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$this->call(Abs\LocationPkg\Database\Seeds\LocationPkgPermissionSeeder::class);
+		$this->call(Abs\LocationPkg\Database\Seeds\ExcelLocationImportPkgSeeder::class);
 	}
 }

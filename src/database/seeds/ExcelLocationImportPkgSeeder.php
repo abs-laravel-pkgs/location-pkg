@@ -10,6 +10,7 @@ class ExcelLocationImportPkgSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
+		// dd('dshjdgsfhjdsg');
 		$items = Excel::selectSheetsByIndex(0)->load('public/excel-imports/locations.xlsx', function ($reader) {
 			$reader->limitRows(1000);
 			$reader->limitColumns(3);
