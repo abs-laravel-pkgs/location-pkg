@@ -103,25 +103,22 @@ class ExcelLocationImportPkgSeeder extends Seeder {
 					//District
 					$district = District::firstOrNew([
 						'name' => $record->district,
+						'state_id' => $states->id,
 					]);
-					$district->state_id = $states->id;
-					$district->name = $record->district;
 					$district->save();
 
 					//Sub-District
 					$sub_district = SubDistrict::firstOrNew([
+						'district_id' => $district->id,
 						'name' => $record->sub_district,
 					]);
-					$sub_district->district_id = $district->id;
-					$sub_district->name = $record->sub_district;
 					$sub_district->save();
 
 					//Cities
 					$cities = City::firstOrNew([
 						'name' => $record->name,
+						'state_id' => $states->id,
 					]);
-					$cities->name = $record->name;
-					$cities->state_id = $states->id;
 					$cities->sub_district_id = $sub_district->id;
 					$cities->save();
 
