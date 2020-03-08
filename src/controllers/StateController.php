@@ -18,6 +18,32 @@ class StateController extends Controller {
 		$this->data['theme'] = config('custom.admin_theme');
 	}
 
+	public function getStates(Request $r) {
+		$validator = Validator::make($r->all(), [
+			'country_id' => 'nullable|exists:countries,id',
+		]);
+		if ($validator->fails()) {
+			return response()->json([
+				'success' => false,
+				'error' => 'Validation errors',
+				'errors' => $validator->errors(),
+			], $this->successStatus);
+		}
+
+		$query = State::from('states');
+
+		if ($r->country_id) {
+			$country = Country::find($r->country_id);
+			if (!$country) {
+				return response()->json(['success' => false, 'errors' => ['Invalid country']]);
+			}
+			$query->where('country_id', $country->id);
+		}
+
+		$states = $query->get();
+		return response()->json(['success' => true, 'states' => $states]);
+	}
+
 	public function getStateFilter() {
 		$this->data['country_list'] = collect(Country::select('id', 'name')->get()->prepend(['id' => '', 'name' => 'Select Country']));
 		$this->data['theme'];

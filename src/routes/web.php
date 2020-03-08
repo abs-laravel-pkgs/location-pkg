@@ -8,6 +8,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/country/save', 'CountryController@saveCountry')->name('saveCountry');
 	Route::get('/country/delete', 'CountryController@deleteCountry')->name('deleteCountry');
 	Route::get('/country/view', 'CountryController@viewCountry')->name('viewCountry');
+	Route::post('/countries/get', 'CountryController@getCountries')->name('getCountries');
 
 	//STATE
 	Route::get('/states/get-list', 'StateController@getStateList')->name('getStateList');
@@ -16,6 +17,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::get('/state/delete', 'StateController@deleteState')->name('deleteState');
 	Route::get('/state/view', 'StateController@viewState')->name('viewState');
 	Route::get('/state/state-filter', 'StateController@getStateFilter')->name('getStateFilter');
+	Route::post('/state/get', 'StateController@getStates')->name('getStates');
 
 	//CITY
 	Route::get('/cities/get-list', 'CityController@getCityList')->name('getCityList');

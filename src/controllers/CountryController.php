@@ -17,6 +17,23 @@ class CountryController extends Controller {
 		$this->data['theme'] = config('custom.admin_theme');
 	}
 
+	public function getCountries(Request $r) {
+		// $validator = Validator::make($r->all(), [
+		// ]);
+		// if ($validator->fails()) {
+		// 	return response()->json([
+		// 		'success' => false,
+		// 		'error' => 'Validation errors',
+		// 		'errors' => $validator->errors(),
+		// 	], $this->successStatus);
+		// }
+
+		$this->data['success'] = 'true';
+		$this->data['country_list'] = Country::getCountries();
+
+		return response()->json($this->data);
+	}
+
 	public function getCountryList(Request $request) {
 		$countries = Country::withTrashed()
 			->select(
