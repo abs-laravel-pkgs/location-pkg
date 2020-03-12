@@ -1,12 +1,15 @@
-app.component('regionList', {
+app.component('regionListPkg', {
     templateUrl: region_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
+        self.add_permission = self.hasPermission('add-region');
+        var table_scroll;
+        table_scroll = $('.page-main-content').height() - 37;
         var dataTable = $('#regions_list').DataTable({
-            "dom": dom_structure,
+            "dom": cndn_dom_structure,
             "language": {
                 "search": "",
                 "searchPlaceholder": "Search",
@@ -16,13 +19,25 @@ app.component('regionList', {
                     "previous": '<i class="icon ion-ios-arrow-back"></i>'
                 },
             },
+            pageLength: 10,
             processing: true,
-            "ordering": false,
+            stateSaveCallback: function(settings, data) {
+                localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function(settings) {
+                var state_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+                if (state_save_val) {
+                    $('#search_region').val(state_save_val.search.search);
+                }
+                return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+            },
             serverSide: true,
             paging: true,
             stateSave: true,
+            scrollY: table_scroll + "px",
+            scrollCollapse: true,
             ajax: {
-                url: laravel_routes['getRegionList'],
+                url: laravel_routes['getRegionPkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
@@ -40,36 +55,28 @@ app.component('regionList', {
                 { data: 'state_name', name: 'states.name' },
                 { data: 'state_code', name: 'states.code' },
             ],
-            "initComplete": function(settings, json) {
-                $('.dataTables_length select').select2();
-                $('#modal-loading').modal('hide');
-            },
             "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html(total + ' / ' + max)
+                $('#table_info').html(total)
+                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
         });
+        $('.dataTables_length select').select2();
 
-        /* Page Title Appended */
-        $('.page-header-content .display-inline-block .data-table-title').html('Regions <span class="badge badge-secondary" id="table_info">0</span>');
-        $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
-        $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
-        if (self.hasPermission('add-region')) {
-            // var addnew_block = $('#add_new_wrap').html();
-            $('.page-header-content .alignment-right .add_new_button').html(
-                '<a href="#!/location-pkg/region/add" role="button" class="btn btn-secondary">Add New</a>' +
-                '<a role="button" id="open" data-toggle="modal"  data-target="#modal-region-filter" class="btn btn-img"> <img src="' + image_scr + '" alt="Filter" onmouseover=this.src="' + image_scr1 + '" onmouseout=this.src="' + image_scr + '"></a>'
-                // '' + addnew_block + ''
-            );
-        }
-        $('.btn-add-close').on("click", function() {
-            $('#regions_list').DataTable().search('').draw();
+        $('.refresh_table').on("click", function() {
+            $('#regions_list').DataTable().ajax.reload();
         });
 
-        $('.btn-refresh').on("click", function() {
-            $('#regions_list').DataTable().ajax.reload();
+        $scope.clear_search = function() {
+            $('#search_city').val('');
+            $('#regions_list').DataTable().search('').draw();
+        }
+
+        var dataTables = $('#regions_list').dataTable();
+        $("#search_region").keyup(function() {
+            dataTables.fnFilter(this.value);
         });
 
         //FOCUS ON SEARCH FIELD
@@ -84,7 +91,7 @@ app.component('regionList', {
         $scope.deleteConfirm = function() {
             $id = $('#region_id').val();
             $http.get(
-                laravel_routes['deleteRegion'], {
+                laravel_routes['deleteRegionPkg'], {
                     params: {
                         id: $id,
                     }
@@ -152,7 +159,7 @@ app.component('regionList', {
 });
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
-app.component('regionForm', {
+app.component('regionFormPkg', {
     templateUrl: region_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
@@ -222,7 +229,7 @@ app.component('regionForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveRegion'],
+                        url: laravel_routes['saveRegionPkg'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -265,7 +272,7 @@ app.component('regionView', {
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
         $http.get(
-            laravel_routes['viewRegion'], {
+            laravel_routes['viewRegionPkg'], {
                 params: {
                     id: $routeParams.id,
                 }

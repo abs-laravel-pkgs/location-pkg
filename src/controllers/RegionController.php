@@ -25,7 +25,7 @@ class RegionController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function getRegionList(Request $request) {
+	public function getRegionPkgList(Request $request) {
 		$regions = Region::withTrashed()
 			->select(
 				'regions.id',
@@ -115,7 +115,7 @@ class RegionController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function viewRegion(Request $request) {
+	public function viewRegionPkg(Request $request) {
 		$this->data['region'] = Region::withTrashed()->with([
 			'state',
 		])->find($request->id);
@@ -124,7 +124,7 @@ class RegionController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function saveRegion(Request $request) {
+	public function saveRegionPkg(Request $request) {
 		// dd($request->all());
 		try {
 			$error_messages = [
@@ -143,14 +143,14 @@ class RegionController extends Controller {
 					'required:true',
 					'max:4',
 					'min:1',
-					'unique:regions,code,' . $request->id . ',id,state_id,' . $request->state_id,
+					// 'unique:regions,code,' . $request->id . ',id,state_id,' . $request->state_id,
 					'unique:regions,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',state_id,' . $request->state_id,
 				],
 				'name' => [
 					'required:true',
 					'max:191',
 					'min:3',
-					'unique:regions,name,' . $request->id . ',id,state_id,' . $request->state_id,
+					// 'unique:regions,name,' . $request->id . ',id,state_id,' . $request->state_id,
 					'unique:regions,name,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',state_id,' . $request->state_id,
 				],
 				'state_id' => 'required',
@@ -162,21 +162,29 @@ class RegionController extends Controller {
 			DB::beginTransaction();
 			if (!$request->id) {
 				$region = new Region;
-				$region->created_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$region->created_by_id = Auth::user()->id;
+				}
 				$region->created_at = Carbon::now();
 				$region->updated_at = NULL;
 			} else {
 				$region = Region::withTrashed()->find($request->id);
-				$region->updated_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$region->updated_by_id = Auth::user()->id;
+				}
 				$region->updated_at = Carbon::now();
 			}
 			$region->fill($request->all());
 			$region->company_id = Auth::user()->company_id;
 			if ($request->status == 'Inactive') {
 				$region->deleted_at = Carbon::now();
-				$region->deleted_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$region->deleted_by_id = Auth::user()->id;
+				}
 			} else {
-				$region->deleted_by_id = NULL;
+				if ($this->data['theme'] != 'theme2') {
+					$region->deleted_by_id = NULL;
+				}
 				$region->deleted_at = NULL;
 			}
 			$region->save();
@@ -192,7 +200,7 @@ class RegionController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteRegion(Request $request) {
+	public function deleteRegionPkg(Request $request) {
 		$delete_status = Region::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
 			return response()->json(['success' => true]);

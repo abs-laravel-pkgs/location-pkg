@@ -1,4 +1,4 @@
-app.component('regionList', {
+app.component('regionListPkg', {
     templateUrl: region_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
@@ -22,7 +22,7 @@ app.component('regionList', {
             paging: true,
             stateSave: true,
             ajax: {
-                url: laravel_routes['getRegionList'],
+                url: laravel_routes['getRegionPkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
@@ -84,7 +84,7 @@ app.component('regionList', {
         $scope.deleteConfirm = function() {
             $id = $('#region_id').val();
             $http.get(
-                laravel_routes['deleteRegion'], {
+                laravel_routes['deleteRegionPkg'], {
                     params: {
                         id: $id,
                     }
@@ -152,7 +152,7 @@ app.component('regionList', {
 });
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
-app.component('regionForm', {
+app.component('regionFormPkg', {
     templateUrl: region_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
@@ -222,7 +222,7 @@ app.component('regionForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveRegion'],
+                        url: laravel_routes['saveRegionPkg'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -265,7 +265,7 @@ app.component('regionView', {
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
         $http.get(
-            laravel_routes['viewRegion'], {
+            laravel_routes['viewRegionPkg'], {
                 params: {
                     id: $routeParams.id,
                 }

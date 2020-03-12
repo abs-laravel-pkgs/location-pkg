@@ -74,7 +74,7 @@ app.component('cityListPkg', {
         }
 
         var dataTables = $('#city_list').dataTable();
-        $("#search_country").keyup(function() {
+        $("#search_city").keyup(function() {
             dataTables.fnFilter(this.value);
         });
 

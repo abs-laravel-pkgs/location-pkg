@@ -28,11 +28,11 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::get('/city/city-filter', 'CityController@getCityFilter')->name('getCityFilter');
 
 	//REGION
-	Route::get('/regions/get-list', 'RegionController@getRegionList')->name('getRegionList');
+	Route::get('/regions/get-list', 'RegionController@getRegionPkgList')->name('getRegionPkgList');
 	Route::get('/region/get-form-data', 'RegionController@getRegionFormData')->name('getRegionFormData');
-	Route::post('/region/save', 'RegionController@saveRegion')->name('saveRegion');
-	Route::get('/region/delete', 'RegionController@deleteRegion')->name('deleteRegion');
-	Route::get('/region/view', 'RegionController@viewRegion')->name('viewRegion');
+	Route::post('/region/save', 'RegionController@saveRegionPkg')->name('saveRegionPkg');
+	Route::get('/region/delete', 'RegionController@deleteRegionPkg')->name('deleteRegionPkg');
+	Route::get('/region/view', 'RegionController@viewRegionPkg')->name('viewRegionPkg');
 	Route::get('/region/get-filter', 'RegionController@getRegionFilter')->name('getRegionFilter');
 
 	//GET STATE BASED COUNTRY

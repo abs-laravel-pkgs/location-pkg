@@ -1,4 +1,4 @@
-app.component('countryList', {
+app.component('countryListPkg', {
     templateUrl: country_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element, $mdSelect) {
         $scope.loading = true;

@@ -64,15 +64,15 @@ app.config(['$routeProvider', function($routeProvider) {
 
     //REGION
     when('/location-pkg/region/list', {
-        template: '<region-list></region-list>',
+        template: '<region-list-pkg></region-list-pkg>',
         title: 'Regions',
     }).
     when('/location-pkg/region/add', {
-        template: '<region-form></region-form>',
+        template: '<region-form-pkg></region-form-pkg>',
         title: 'Add Region',
     }).
     when('/location-pkg/region/edit/:id', {
-        template: '<region-form></region-form>',
+        template: '<region-form-pkg></region-form-pkg>',
         title: 'Edit Region',
     }).
     when('/location-pkg/region/view/:id', {
