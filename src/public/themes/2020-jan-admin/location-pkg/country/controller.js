@@ -1,25 +1,3 @@
-app.config(['$routeProvider', function($routeProvider) {
-
-    $routeProvider.
-    //CUSTOMER
-    when('/location-pkg/country/list', {
-        template: '<country-list></country-list>',
-        title: 'Countries',
-    }).
-    when('/location-pkg/country/add', {
-        template: '<country-form></country-form>',
-        title: 'Add Country',
-    }).
-    when('/location-pkg/country/edit/:id', {
-        template: '<country-form></country-form>',
-        title: 'Edit Country',
-    }).
-    when('/location-pkg/country/view/:id', {
-        template: '<country-view></country-view>',
-        title: 'View Country',
-    });
-}]);
-
 app.component('countryList', {
     templateUrl: country_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element, $mdSelect) {
@@ -44,7 +22,7 @@ app.component('countryList', {
             paging: true,
             stateSave: true,
             ajax: {
-                url: laravel_routes['getCountryList'],
+                url: laravel_routes['getCountryPkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
@@ -107,7 +85,7 @@ app.component('countryList', {
         $scope.deleteConfirm = function() {
             $id = $('#country_id').val();
             $http.get(
-                laravel_routes['deleteCountry'], {
+                laravel_routes['deleteCountryPkg'], {
                     params: {
                         id: $id,
                     }
@@ -273,7 +251,7 @@ app.component('countryForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('.submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveCountry'],
+                        url: laravel_routes['savePkgCountry'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -317,7 +295,7 @@ app.component('countryView', {
         self.state_permission = self.hasPermission('states');
         self.angular_routes = angular_routes;
         $http.get(
-            laravel_routes['viewCountry'], {
+            laravel_routes['viewCountryPkg'], {
                 params: {
                     id: $routeParams.id,
                 }

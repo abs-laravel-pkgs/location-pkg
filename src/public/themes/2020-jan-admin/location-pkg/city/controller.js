@@ -1,25 +1,4 @@
-app.config(['$routeProvider', function($routeProvider) {
-
-    $routeProvider.
-    when('/location-pkg/city/list', {
-        template: '<city-list></city-list>',
-        title: 'Cities',
-    }).
-    when('/location-pkg/city/add', {
-        template: '<city-form></city-form>',
-        title: 'Add City',
-    }).
-    when('/location-pkg/city/edit/:id', {
-        template: '<city-form></city-form>',
-        title: 'Edit City',
-    }).
-    when('/location-pkg/city/view/:id', {
-        template: '<city-view></city-view>',
-        title: 'View City',
-    });
-}]);
-
-app.component('cityList', {
+app.component('cityListPkg', {
     templateUrl: city_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
@@ -43,7 +22,7 @@ app.component('cityList', {
             "ordering": false,
             stateSave: true,
             ajax: {
-                url: laravel_routes['getCityList'],
+                url: laravel_routes['getCityPkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
@@ -106,7 +85,7 @@ app.component('cityList', {
         $scope.deleteConfirm = function() {
             $id = $('#city_id').val();
             $http.get(
-                laravel_routes['deleteCity'], {
+                laravel_routes['deleteCityPkg'], {
                     params: {
                         id: $id,
                     }
@@ -306,7 +285,7 @@ app.component('cityView', {
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
         $http.get(
-            laravel_routes['viewCity'], {
+            laravel_routes['viewCityPkg'], {
                 params: {
                     id: $routeParams.id,
                 }

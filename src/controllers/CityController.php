@@ -26,7 +26,7 @@ class CityController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function getCityList(Request $request) {
+	public function getCityPkgList(Request $request) {
 		$cities = City::withTrashed()
 			->select(
 				'cities.id',
@@ -61,7 +61,8 @@ class CityController extends Controller {
 					$query->whereNotNull('states.deleted_at');
 				}
 			})
-			->orderby('cities.id', 'desc');
+		// ->orderby('cities.id', 'desc')
+		;
 
 		return Datatables::of($cities)
 			->addColumn('name', function ($city) {
@@ -117,7 +118,7 @@ class CityController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function viewCity(Request $request) {
+	public function viewCityPkg(Request $request) {
 		$this->data['city'] = $city = City::withTrashed()->with([
 			'state',
 		])->find($request->id);
@@ -151,20 +152,28 @@ class CityController extends Controller {
 			DB::beginTransaction();
 			if (!$request->id) {
 				$city = new City;
-				$city->created_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$city->created_by_id = Auth::user()->id;
+				}
 				$city->created_at = Carbon::now();
 				$city->updated_at = NULL;
 			} else {
 				$city = City::withTrashed()->find($request->id);
-				$city->updated_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$city->updated_by_id = Auth::user()->id;
+				}
 				$city->updated_at = Carbon::now();
 			}
 			$city->fill($request->all());
 			if ($request->status == 'Inactive') {
 				$city->deleted_at = Carbon::now();
-				$city->deleted_by_id = Auth::user()->id;
+				if ($this->data['theme'] != 'theme2') {
+					$city->deleted_by_id = Auth::user()->id;
+				}
 			} else {
-				$city->deleted_by_id = NULL;
+				if ($this->data['theme'] != 'theme2') {
+					$city->deleted_by_id = NULL;
+				}
 				$city->deleted_at = NULL;
 			}
 			$city->save();
@@ -180,7 +189,7 @@ class CityController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteCity(Request $request) {
+	public function deleteCityPkg(Request $request) {
 		$delete_status = City::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
 			return response()->json(['success' => true]);

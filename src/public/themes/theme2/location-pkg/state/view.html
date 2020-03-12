@@ -1,0 +1,172 @@
+<!--Content Wrap -->
+<div class="content-wrap">
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header-content">
+                        <div class="page-header-inner page-title display-inline-block">
+                            <div class="previous-page">
+                                <a href="#!/location-pkg/state/list"><img src="./public/themes/{{$ctrl.theme}}/img/content/previous.svg" class="img-responsive"></a>
+                            </div>
+                        </div><!-- Page Header Inner -->
+                        <div class="page-header-inner page-title display-inline-block">
+                            <h1 class="title">{{$ctrl.action}} State</h1>
+                            <p class="subtitle">
+                                <a href="#!/location-pkg/state/list">
+                                    States
+                                </a> /
+                                {{$ctrl.action}}
+                            </p>
+                        </div><!-- Page Header Inner -->
+                    </div><!-- Page Header Content -->
+                </div><!-- Col Main -->
+            </div><!-- Row -->
+        </div><!-- Container -->
+    </div><!-- Page Header -->
+    <!-- Page Main Content -->
+    <div class="page-main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-tab-form pb-80">
+                        <div class="tab-form-wrap">
+                            <div class="tab-form-header">
+                                <div class="tab-header">
+                                    <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                        <ul class="nav nav-pills editDetails-tabs">
+                                            <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                            <li ng-if="$ctrl.region_permission"><a data-target="#regions" role="tab" data-toggle="tab" aria-expanded="true">Regions</a></li>
+                                            <li ng-if="$ctrl.city_permission"><a data-target="#city" role="tab" data-toggle="tab" aria-expanded="true">Cities</a></li>
+                                        </ul>
+                                    </div><!-- Filters -->
+                                </div><!-- Tab Header -->
+                            </div><!-- Tab Form Header -->
+                            <div class="tab-form-body">
+                                <div class="tab-content">
+                                    <!-- TAB PANEL -->
+                                    <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="tab-pane-wrap">
+                                            <div class="row">
+                                                <ul class="claimed-coupon-list">
+                                                    <li class="claimed-coupon-list-item">
+                                                        <span class="label">State Name</span>
+                                                        <span class="info">{{$ctrl.state.name}}</span>
+                                                    </li>
+                                                    <li class="claimed-coupon-list-item">
+                                                        <span class="label">State Code</span>
+                                                        <span class="info">{{$ctrl.state.code}}</span>
+                                                    </li>
+                                                    <li class="claimed-coupon-list-item">
+                                                        <span class="label">Country</span>
+                                                        <span class="info">{{$ctrl.state.country.name}}</span>
+                                                    </li>
+                                                    <li class="claimed-coupon-list-item">
+                                                        <span class="label">Active Status</span>
+                                                        <span class="info">{{$ctrl.state.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                    </li>
+                                                </ul>
+                                            </div><!-- Row -->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="tab-pane-footer text-right">
+                                                        <a class="btn btn-grey btn-nxt">Next</a>
+                                                    </div><!-- Tab Footer -->
+                                                </div>
+                                            </div><!-- Row -->
+                                        </div><!-- Tab Pane Wrap -->
+                                    </div><!-- Tab Pane -->
+                                    <div class="tab-pane fade" id="regions" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="tab-pane-wrap">
+                                            <div class="row">
+                                                <div class="col-lg-9 col-md-8">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-form">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Region Name</th>
+                                                                    <th>Region Code</th>
+                                                                    <th>Active Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="(index, region) in $ctrl.regions">
+                                                                    <td>
+                                                                        <span class="info">{{region.name}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="info">{{region.code}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="info">{{region.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr ng-if="$ctrl.regions.length == 0">
+                                                                    <td colspan="3" style="text-align: center;">
+                                                                        <span class="info">No data available in table</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div><!-- Table Responsive -->
+                                                </div><!-- Column -->
+                                            </div><!-- Row -->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="tab-pane-footer text-right">
+                                                        <a class="btn btn-grey btn-prev">Previous</a>
+                                                        <a class="btn btn-grey btn-nxt">Next</a>
+                                                    </div><!-- Tab Footer -->
+                                                </div>
+                                            </div><!-- Row -->
+                                        </div><!-- Tab Pane Wrap -->
+                                    </div><!-- Tab Pane -->
+                                    <div class="tab-pane fade" id="city" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="tab-pane-wrap">
+                                            <div class="row">
+                                                <div class="col-lg-9 col-md-8">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-form">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>City Name</th>
+                                                                    <th>Active Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="(index, city) in $ctrl.cities">
+                                                                    <td>
+                                                                        <span class="info">{{city.name}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="info">{{city.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr ng-if="$ctrl.cities.length == 0">
+                                                                    <td colspan="2" style="text-align: center;">
+                                                                        <span class="info">No data available in table</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div><!-- Table Responsive -->
+                                                </div><!-- Column -->
+                                            </div><!-- Row -->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="tab-pane-footer text-right">
+                                                        <a class="btn btn-grey btn-prev">Previous</a>
+                                                    </div><!-- Tab Footer -->
+                                                </div>
+                                            </div><!-- Row -->
+                                        </div><!-- Tab Pane Wrap -->
+                                    </div><!-- Tab Pane -->
+                                </div><!-- Tab Content -->
+                            </div><!-- Tab Form Body -->
+                        </div><!-- Tab Form Wrap -->
+                    </div><!-- Page Tab Form -->
+                </div><!-- Column -->
+            </div><!-- Row -->
+        </div><!-- Container -->
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->

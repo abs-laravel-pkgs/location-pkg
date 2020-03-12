@@ -3,11 +3,11 @@
 Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'], 'prefix' => 'location-pkg'], function () {
 
 	//COUNTRY
-	Route::get('/countries/get-list', 'CountryController@getCountryList')->name('getCountryList');
+	Route::get('/countries/get-list', 'CountryController@getCountryPkgList')->name('getCountryPkgList');
 	Route::get('/country/get-form-data', 'CountryController@getCountryFormData')->name('getCountryFormData');
-	Route::post('/country/save', 'CountryController@saveCountry')->name('saveCountry');
-	Route::get('/country/delete', 'CountryController@deleteCountry')->name('deleteCountry');
-	Route::get('/country/view', 'CountryController@viewCountry')->name('viewCountry');
+	Route::post('/country/save', 'CountryController@savePkgCountry')->name('savePkgCountry');
+	Route::get('/country/delete', 'CountryController@deleteCountryPkg')->name('deleteCountryPkg');
+	Route::get('/country/view', 'CountryController@viewCountryPkg')->name('viewCountryPkg');
 	Route::post('/countries/get', 'CountryController@getCountries')->name('getCountries');
 
 	//STATE
@@ -20,11 +20,11 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/state/get', 'StateController@getStates')->name('getStates');
 
 	//CITY
-	Route::get('/cities/get-list', 'CityController@getCityList')->name('getCityList');
+	Route::get('/cities/get-list', 'CityController@getCityPkgList')->name('getCityPkgList');
 	Route::get('/city/get-form-data', 'CityController@getCityFormData')->name('getCityFormData');
 	Route::post('/city/save', 'CityController@saveCity')->name('saveCity');
-	Route::get('/city/delete', 'CityController@deleteCity')->name('deleteCity');
-	Route::get('/city/view', 'CityController@viewCity')->name('viewCity');
+	Route::get('/city/delete', 'CityController@deleteCityPkg')->name('deleteCityPkg');
+	Route::get('/city/view', 'CityController@viewCityPkg')->name('viewCityPkg');
 	Route::get('/city/city-filter', 'CityController@getCityFilter')->name('getCityFilter');
 
 	//REGION
