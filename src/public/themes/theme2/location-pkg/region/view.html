@@ -1,85 +1,76 @@
-<!--Content Wrap -->
-<div class="content-wrap">
+<!-- Content Wrap -->
+<div class="content-wrap cndn-wrap">
+    <!-- Page Header -->
     <div class="page-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header-content">
-                        <div class="page-header-inner page-title display-inline-block">
-                            <div class="previous-page">
-                                <a href="#!/location-pkg/region/list"><img src="./public/themes/{{$ctrl.theme}}/img/content/previous.svg" class="img-responsive"></a>
-                            </div>
-                        </div><!-- Page Header Inner -->
-                        <div class="page-header-inner page-title display-inline-block">
-                            <h1 class="title">{{$ctrl.action}} Region</h1>
-                            <p class="subtitle">
-                                <a href="#!/location-pkg/region/list">
-                                    Regions
-                                </a> /
-                                {{$ctrl.action}}
-                            </p>
-                        </div><!-- Page Header Inner -->
-                    </div><!-- Page Header Content -->
-                </div><!-- Col Main -->
-            </div><!-- Row -->
-        </div><!-- Container -->
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/location-pkg/region/list" type="button" class="btn-back btn-img">
+                        <img class="img-responsive my-tooltip" src="./public/theme/img/content/previous.svg" alt="Back" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left" />
+                    </a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title">{{$ctrl.action}} Region</h1>
+                    <p class="subtitle">
+                        Masters /
+                        <a href="#!/location-pkg/region/list">
+                            Regions
+                        </a> /
+                        {{$ctrl.action}}
+                    </p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
     </div><!-- Page Header -->
+    <!-- Content Wrap -->
     <!-- Page Main Content -->
-    <div class="page-main-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-tab-form pb-80">
-                        <div class="tab-form-wrap">
-                            <div class="tab-form-header">
-                                <div class="tab-header">
-                                    <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
-                                        <ul class="nav nav-pills editDetails-tabs">
-                                            <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
-                                        </ul>
-                                    </div><!-- Filters -->
-                                </div><!-- Tab Header -->
-                            </div><!-- Tab Form Header -->
-                            <div class="tab-form-body">
-                                <div class="tab-content">
-                                    <!-- TAB PANEL -->
-                                    <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
-                                        <div class="tab-pane-wrap">
-                                            <div class="row">
-                                                <ul class="claimed-coupon-list">
-                                                    <li class="claimed-coupon-list-item">
-                                                        <span class="label">Region Name</span>
-                                                        <span class="info">{{$ctrl.region.name}}</span>
-                                                    </li>
-                                                    <li class="claimed-coupon-list-item">
-                                                        <span class="label">Region Code</span>
-                                                        <span class="info">{{$ctrl.region.code}}</span>
-                                                    </li>
-                                                    <li class="claimed-coupon-list-item">
-                                                        <span class="label">State</span>
-                                                        <span class="info">{{$ctrl.region.state.name}}</span>
-                                                    </li>
-                                                    <li class="claimed-coupon-list-item">
-                                                        <span class="label">Active Status</span>
-                                                        <span class="info">{{$ctrl.region.deleted_at ? 'Inactive' : 'Active'}}</span>
-                                                    </li>
-                                                </ul>
-                                            </div><!-- Row -->
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="tab-pane-footer text-right">
-                                                        <!-- <a class="btn btn-grey btn-nxt">Next</a> -->
-                                                    </div><!-- Tab Footer -->
-                                                </div>
-                                            </div><!-- Row -->
-                                        </div><!-- Tab Pane Wrap -->
-                                    </div><!-- Tab Pane -->
-                                </div><!-- Tab Content -->
-                            </div><!-- Tab Form Body -->
-                        </div><!-- Tab Form Wrap -->
-                    </div><!-- Page Tab Form -->
-                </div><!-- Column -->
-            </div><!-- Row -->
-        </div><!-- Container -->
+    <div class="page-main-content form-content type2">
+        <form id="form" autocomplete="off">
+            <input type="hidden" name="id" value="{{$ctrl.region.id}}">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills editDetails-tabs">
+                                    <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Info</a></li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="tab-pane-wrap">
+                                        <div class="row">
+                                            <ul class="grid-row">
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Region Name</span>
+                                                    <span class="grid-col-value">{{$ctrl.region.name}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Region Code</span>
+                                                    <span class="grid-col-value">{{$ctrl.region.code}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">State Name</span>
+                                                    <span class="grid-col-value">{{$ctrl.region.state.name}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Active Status</span>
+                                                    <span class="grid-col-value {{$ctrl.region.deleted_at ==NULL ? 'color-green' : 'color-red'}}">{{$ctrl.region.deleted_at ? 'Inactive': 'Active'}}</span>
+                                                </li>
+                                            </ul>
+                                        </div><!-- Column -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
     </div><!-- Page Main Content -->
 </div><!-- Content Wrap -->

@@ -76,7 +76,7 @@ app.config(['$routeProvider', function($routeProvider) {
         title: 'Edit Region',
     }).
     when('/location-pkg/region/view/:id', {
-        template: '<region-view></region-view>',
+        template: '<region-view-pkg></region-view-pkg>',
         title: 'View Region',
     });
 

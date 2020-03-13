@@ -265,7 +265,7 @@ app.component('regionFormPkg', {
 });
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
-app.component('regionView', {
+app.component('regionViewPkg', {
     templateUrl: region_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;

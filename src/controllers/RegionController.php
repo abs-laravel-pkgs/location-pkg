@@ -119,6 +119,8 @@ class RegionController extends Controller {
 		$this->data['region'] = Region::withTrashed()->with([
 			'state',
 		])->find($request->id);
+		$this->data['action'] = 'View';
+
 		$this->data['theme'];
 
 		return response()->json($this->data);
