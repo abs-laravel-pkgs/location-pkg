@@ -5,6 +5,10 @@ app.component('countryListPkg', {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         self.add_permission = self.hasPermission('add-country');
+        if (!self.hasPermission('countries')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#country_list').DataTable({
@@ -157,6 +161,10 @@ app.component('countryForm', {
         //get_form_data_url = typeof($routeParams.id) == 'undefined' ? country_get_form_data_url : country_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-country') || !self.hasPermission('edit-country')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.state_permission = self.hasPermission('states')
         self.angular_routes = angular_routes;
         $http.get(
@@ -300,6 +308,10 @@ app.component('countryView', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('view-country')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.state_permission = self.hasPermission('states');
         self.angular_routes = angular_routes;
         $http.get(

@@ -5,6 +5,10 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('states')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.add_permission = self.hasPermission('add-state');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
@@ -166,6 +170,10 @@ app.component('stateForm', {
         //get_form_data_url = typeof($routeParams.id) == 'undefined' ? state_get_form_data_url : state_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-state') || !self.hasPermission('edit-state')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.region_permission = self.hasPermission('regions');
         self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;
@@ -328,6 +336,10 @@ app.component('stateView', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('view-state')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.region_permission = self.hasPermission('regions');
         self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;

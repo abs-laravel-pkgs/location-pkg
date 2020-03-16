@@ -4,6 +4,10 @@ app.component('cityListPkg', {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('cities')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.add_permission = self.hasPermission('add-city');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
@@ -187,6 +191,10 @@ app.component('cityForm', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-city') || !self.hasPermission('edit-city')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['getCityFormData'], {
@@ -292,6 +300,10 @@ app.component('cityView', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('view-city')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['viewCityPkg'], {

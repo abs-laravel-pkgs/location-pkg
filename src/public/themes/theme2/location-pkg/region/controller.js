@@ -6,6 +6,10 @@ app.component('regionListPkg', {
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
         self.add_permission = self.hasPermission('add-region');
+        if (!self.hasPermission('regions')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#regions_list').DataTable({
@@ -164,6 +168,10 @@ app.component('regionFormPkg', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-region') || !self.hasPermission('edit-region')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['getRegionFormData'], {
@@ -270,6 +278,10 @@ app.component('regionViewPkg', {
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('view-region')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['viewRegionPkg'], {
