@@ -3,6 +3,7 @@
 namespace Abs\LocationPkg;
 use Abs\LocationPkg\Region;
 use Abs\LocationPkg\State;
+use App\ActivityLog;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
@@ -59,7 +60,8 @@ class RegionController extends Controller {
 					$query->whereNotNull('states.deleted_at');
 				}
 			})
-			->orderby('regions.id', 'desc');
+		// ->orderby('regions.id', 'desc')
+		;
 
 		return Datatables::of($regions)
 			->addColumn('name', function ($region) {
@@ -184,6 +186,17 @@ class RegionController extends Controller {
 			}
 			$region->save();
 
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'Region Master';
+			$activity->entity_id = $region->id;
+			$activity->entity_type_id = 364;
+			$activity->activity_id = $request->id == NULL ? 280 : 281;
+			$activity->activity = $request->id == NULL ? 280 : 281;
+			$activity->details = json_encode($activity);
+			$activity->save();
+
 			DB::commit();
 			if (!($request->id)) {
 				return response()->json(['success' => true, 'message' => ['Region Details Added Successfully']]);
@@ -198,6 +211,16 @@ class RegionController extends Controller {
 	public function deleteRegionPkg(Request $request) {
 		$delete_status = Region::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'Region Master';
+			$activity->entity_id = $request->id;
+			$activity->entity_type_id = 362;
+			$activity->activity_id = 282;
+			$activity->activity = 282;
+			$activity->details = json_encode($activity);
+			$activity->save();
 			return response()->json(['success' => true]);
 		}
 	}

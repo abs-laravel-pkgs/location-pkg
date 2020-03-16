@@ -3,6 +3,7 @@
 namespace Abs\LocationPkg;
 use Abs\LocationPkg\City;
 use Abs\LocationPkg\State;
+use App\ActivityLog;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
@@ -178,6 +179,17 @@ class CityController extends Controller {
 			}
 			$city->save();
 
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'City Master';
+			$activity->entity_id = $city->id;
+			$activity->entity_type_id = 365;
+			$activity->activity_id = $request->id == NULL ? 280 : 281;
+			$activity->activity = $request->id == NULL ? 280 : 281;
+			$activity->details = json_encode($activity);
+			$activity->save();
+
 			DB::commit();
 			if (!($request->id)) {
 				return response()->json(['success' => true, 'message' => ['City Details Added Successfully']]);
@@ -192,6 +204,17 @@ class CityController extends Controller {
 	public function deleteCityPkg(Request $request) {
 		$delete_status = City::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'City Master';
+			$activity->entity_id = $request->id;
+			$activity->entity_type_id = 365;
+			$activity->activity_id = 282;
+			$activity->activity = 282;
+			$activity->details = json_encode($activity);
+			$activity->save();
+
 			return response()->json(['success' => true]);
 		}
 	}

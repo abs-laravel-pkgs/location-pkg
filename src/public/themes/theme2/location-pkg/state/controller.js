@@ -5,7 +5,7 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
-        self.add_permission = self.hasPermission('add-city');
+        self.add_permission = self.hasPermission('add-state');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#state_list').DataTable({
@@ -92,7 +92,7 @@ app.component('stateListPkg', {
         $scope.deleteConfirm = function() {
             $id = $('#state_id').val();
             $http.get(
-                laravel_routes['deleteState'], {
+                laravel_routes['deleteStatePkg'], {
                     params: {
                         id: $id,
                     }
@@ -287,7 +287,7 @@ app.component('stateForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('.submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveState'],
+                        url: laravel_routes['saveStatePkg'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -332,7 +332,7 @@ app.component('stateView', {
         self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;
         $http.get(
-            laravel_routes['viewState'], {
+            laravel_routes['viewStatePkg'], {
                 params: {
                     id: $routeParams.id,
                 }

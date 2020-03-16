@@ -2,6 +2,7 @@
 
 namespace Abs\LocationPkg;
 use Abs\LocationPkg\Country;
+use App\ActivityLog;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
@@ -325,8 +326,30 @@ class CountryController extends Controller {
 					$state->name = $state_data['name'];
 					$state->code = $state_data['code'];
 					$state->save();
+
+					$activity = new ActivityLog;
+					$activity->date_time = Carbon::now();
+					$activity->user_id = Auth::user()->id;
+					$activity->module = 'State Master';
+					$activity->entity_id = $state->id;
+					$activity->entity_type_id = 363;
+					$activity->activity_id = $request->id == NULL ? 280 : 281;
+					$activity->activity = $request->id == NULL ? 280 : 281;
+					$activity->details = json_encode($activity);
+					$activity->save();
 				}
 			}
+
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'Country Master';
+			$activity->entity_id = $country->id;
+			$activity->entity_type_id = 362;
+			$activity->activity_id = $request->id == NULL ? 280 : 281;
+			$activity->activity = $request->id == NULL ? 280 : 281;
+			$activity->details = json_encode($activity);
+			$activity->save();
 
 			DB::commit();
 			if (!($request->id)) {
@@ -342,6 +365,16 @@ class CountryController extends Controller {
 	public function deleteCountryPkg(Request $request) {
 		$delete_status = Country::withTrashed()->where('id', $request->id)->forceDelete();
 		if ($delete_status) {
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'Country Master';
+			$activity->entity_id = $request->id;
+			$activity->entity_type_id = 362;
+			$activity->activity_id = 282;
+			$activity->activity = 282;
+			$activity->details = json_encode($activity);
+			$activity->save();
 			return response()->json(['success' => true]);
 		}
 	}

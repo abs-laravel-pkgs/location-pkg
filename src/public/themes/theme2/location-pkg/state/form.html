@@ -25,7 +25,7 @@
     <!-- Page Main Content -->
     <div class="page-main-content form-content type2">
         <form id="form" autocomplete="off">
-            <input type="hidden" name="id" value="{{$ctrl.city.id}}">
+            <input type="hidden" name="id" value="{{$ctrl.state.id}}">
             <div class="page-tab-form pb-70">
                 <div class="tab-form-wrap">
                     <div class="tab-form-header">
@@ -47,19 +47,19 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <lable>State Name<span class="mandatory">*</span></lable>
+                                                <label>State Name<span class="mandatory">*</span></label>
                                                 <input type="text" name="name" ng-model='$ctrl.state.name' class="form-control required" placeholder="Enter State Name">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <lable>State Code<span class="mandatory">*</span></lable>
+                                                <label>State Code<span class="mandatory">*</span></label>
                                                 <input type="text" name="code" ng-model='$ctrl.state.code' class="form-control required" placeholder="Enter State Code">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <lable>Country<span class="mandatory">*</span></lable>
+                                                <label>Country<span class="mandatory">*</span></label>
                                                 <md-select ng-model="$ctrl.state.country_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Country">
                                                     <md-select-header class="demo-select-header">
                                                         <input ng-model="searchTerm" type="search" placeholder="Search for a Country" class="demo-header-searchbox md-text">
