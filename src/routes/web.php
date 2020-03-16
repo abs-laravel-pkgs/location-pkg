@@ -11,7 +11,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/countries/get', 'CountryController@getCountries')->name('getCountries');
 
 	//STATE
-	Route::get('/states/get-list', 'StateController@getStateList')->name('getStateList');
+	Route::get('/states/get-list', 'StateController@getStatePkgList')->name('getStatePkgList');
 	Route::get('/state/get-form-data', 'StateController@getStateFormData')->name('getStateFormData');
 	Route::post('/state/save', 'StateController@saveState')->name('saveState');
 	Route::get('/state/delete', 'StateController@deleteState')->name('deleteState');

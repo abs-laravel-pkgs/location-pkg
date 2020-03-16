@@ -64,29 +64,29 @@
                                                 <input type="text" name="code" ng-model='$ctrl.country.code' class="form-control required" placeholder="Enter Country Code">
                                             </div>
                                         </div>
-                                        <!-- <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>ISO Code<span class="mandatory">*</span></label>
-                                                            <input type="text" name="iso_code" ng-model='$ctrl.country.iso_code' class="form-control required" placeholder="Enter ISO Code">
-                                                        </div>
-                                                    </div> -->
-                                        <!-- <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>Mobile Code</label>
-                                                            <input type="text" name="mobile_code" ng-model='$ctrl.country.mobile_code' class="form-control" placeholder="Eg: +91">
-                                                        </div>
-                                                    </div> -->
-                                        <!-- <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>Has State List<span class="mandatory">*</span></label>
-                                                            <div class="common-radio-button">
-                                                                <input type="radio" id="change-yes" name="has_state_list" value="1" ng-checked="$ctrl.country.has_state_list=='1'">
-                                                                <label for="change-yes">Yes</label>
-                                                                <input type="radio" id="change-no" name="has_state_list" value="0" ng-checked="$ctrl.country.has_state_list!='1'">
-                                                                <label for="change-no">No</label>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>ISO Code<span class="mandatory">*</span></label>
+                                                <input type="text" name="iso_code" ng-model='$ctrl.country.iso_code' class="form-control required" placeholder="Enter ISO Code">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Mobile Code</label>
+                                                <input type="text" name="mobile_code" ng-model='$ctrl.country.mobile_code' class="form-control" placeholder="Eg: +91">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Has State List<span class="mandatory">*</span></label>
+                                                <div class="common-radio-button">
+                                                    <input type="radio" id="change-yes" name="has_state_list" value="1" ng-checked="$ctrl.country.has_state_list=='1'">
+                                                    <label for="change-yes">Yes</label>
+                                                    <input type="radio" id="change-no" name="has_state_list" value="0" ng-checked="$ctrl.country.has_state_list!='1'">
+                                                    <label for="change-no">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>
@@ -134,24 +134,18 @@
                                                         <tr ng-repeat="(index, state) in $ctrl.state_list">
                                                             <input type="hidden" ng-model="state.id" name="states[{{index}}][id]" value="{{state.id}}">
                                                             <td>
-                                                                <div class="form-group">
-                                                                    <input type="text" name="states[{{index}}][name]" ng-model='state.name' class="form-control type-sm required state_name" placeholder="Enter state Name">
-                                                                </div>
+                                                                <input type="text" name="states[{{index}}][name]" ng-model='state.name' class="form-control type-sm required state_name" placeholder="Enter state Name">
                                                             </td>
                                                             <td>
-                                                                <div class="form-group">
-                                                                    <input type="text" name="states[{{index}}][code]" ng-model='state.code' class="form-control type-sm required state_code" placeholder="Enter state Code">
-                                                                </div>
+                                                                <input type="text" name="states[{{index}}][code]" ng-model='state.code' class="form-control type-sm required state_code" placeholder="Enter state Code">
                                                             </td>
                                                             <td>
-                                                                <div class="form-group">
-                                                                    <div class="tab-switch">
-                                                                        <md-switch ng-model="state.switch_value" aria-label="Switch {{index}}" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
-                                                                            {{ state.switch_value }}
-                                                                        </md-switch>
-                                                                    </div>
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="state.switch_value" aria-label="Switch {{index}}" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                        {{ state.switch_value }}
+                                                                    </md-switch>
                                                                     <input type="hidden" name="states[{{index}}][status]" value="{{state.switch_value}}">
-                                                                </div><!-- Field -->
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <a href="javascript:;" ng-click="removestate(index,state.id)"><img src="./public/themes/{{$ctrl.theme}}/img/content/modal/close-circle-active.svg" class="img-fluid" alt="Delete"></a>

@@ -35,7 +35,15 @@ class CountryController extends Controller {
 	}
 
 	public function getCountryPkgList(Request $request) {
-		$countries = Country::withTrashed()
+		$countries = Country::withTrashed()->select(
+			'countries.id',
+			'countries.code',
+			'countries.name',
+			DB::raw('COALESCE(countries.iso_code,"--") as iso_code'),
+			DB::raw('COALESCE(countries.mobile_code,"--") as mobile_code'),
+			DB::raw('COUNT(states.id) as states'),
+			DB::raw('IF(countries.deleted_at IS NULL,"Active","Inactive") as status')
+		)
 			->leftJoin('states', 'countries.id', 'states.country_id')
 			->where(function ($query) use ($request) {
 				if (!empty($request->country_code)) {
@@ -62,25 +70,6 @@ class CountryController extends Controller {
 			->groupBy('countries.id')
 		// ->orderBy('countries.id', 'desc')
 		;
-		if ($this->data['theme'] == 'theme2') {
-			$countries = $countries->select(
-				'countries.id',
-				'countries.code',
-				'countries.name',
-				DB::raw('COUNT(states.id) as states'),
-				DB::raw('IF(countries.deleted_at IS NULL,"Active","Inactive") as status')
-			);
-		} else {
-			$countries = $countries->select(
-				'countries.id',
-				'countries.code',
-				'countries.name',
-				'countries.iso_code',
-				DB::raw('COALESCE(countries.mobile_code,"--") as mobile_code'),
-				DB::raw('COUNT(states.id) as states'),
-				DB::raw('IF(countries.deleted_at IS NULL,"Active","Inactive") as status')
-			);
-		}
 
 		return Datatables::of($countries)
 			->addColumn('name', function ($countries) {
@@ -138,7 +127,7 @@ class CountryController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function viewPkgCountry(Request $request) {
+	public function viewCountryPkg(Request $request) {
 		$this->data['country'] = $country = Country::withTrashed()->find($request->id);
 		$this->data['state_list'] = State::withTrashed()->where('country_id', $request->id)->get();
 		$this->data['action'] = 'View';
@@ -177,11 +166,11 @@ class CountryController extends Controller {
 					'name.max' => 'Country Name Maximum 64 Characters',
 					'name.min' => 'Country Name Minimum 3 Characters',
 					'name.unique' => 'Country Name is already taken',
-					// 'iso_code.required' => 'ISO Code is Required',
-					// 'iso_code.max' => 'ISO Code Maximum 3 Characters',
-					// 'iso_code.min' => 'ISO Code Minimum 1 Characters',
-					// 'iso_code.unique' => 'ISO Code is already taken',
-					// 'mobile_code.max' => 'Mobile Code Maximum 10 Characters',
+					'iso_code.required' => 'ISO Code is Required',
+					'iso_code.max' => 'ISO Code Maximum 3 Characters',
+					'iso_code.min' => 'ISO Code Minimum 1 Characters',
+					'iso_code.unique' => 'ISO Code is already taken',
+					'mobile_code.max' => 'Mobile Code Maximum 10 Characters',
 				];
 				$validator = Validator::make($request->all(), [
 					'code' => [
@@ -285,36 +274,28 @@ class CountryController extends Controller {
 
 			if (!$request->id) {
 				$country = new Country;
-				if ($this->data['theme'] != 'theme2') {
-					$country->created_by_id = Auth::user()->id;
-				}
+				$country->created_by_id = Auth::user()->id;
 				$country->created_at = Carbon::now();
 				$country->updated_at = NULL;
 			} else {
 				$country = Country::withTrashed()->find($request->id);
-				if ($this->data['theme'] != 'theme2') {
-					$country->updated_by_id = Auth::user()->id;
-				}
+				$country->updated_by_id = Auth::user()->id;
 				$country->updated_at = Carbon::now();
 			}
-			if ($this->data['theme'] == 'theme2') {
-				$country->fill($request->all());
-			} else {
-				$country->iso_code = $request->iso_code;
-				$country->has_state_list = $request->has_state_list;
-				$country->mobile_code = $request->mobile_code;
-				$country->fill($request->all());
-			}
+			$country->iso_code = $request->iso_code;
+			$country->has_state_list = $request->has_state_list;
+			$country->mobile_code = $request->mobile_code;
+
 			$country->fill($request->all());
 			if ($request->status == 'Inactive') {
 				$country->deleted_at = Carbon::now();
-				if ($this->data['theme'] != 'theme2') {
-					$country->deleted_by_id = Auth::user()->id;
-				}
+
+				$country->deleted_by_id = Auth::user()->id;
+
 			} else {
-				if ($this->data['theme'] != 'theme2') {
-					$country->deleted_by_id = NULL;
-				}
+
+				$country->deleted_by_id = NULL;
+
 				$country->deleted_at = NULL;
 			}
 			$country->save();
@@ -323,27 +304,21 @@ class CountryController extends Controller {
 				foreach ($request->states as $state_data) {
 					if (!$state_data['id']) {
 						$state = new State;
-						if ($this->data['theme'] != 'theme2') {
-							$state->created_by_id = Auth::user()->id;
-						}
+
+						$state->created_by_id = Auth::user()->id;
+
 						$state->created_at = Carbon::now();
 						$state->deleted_at = NULL;
 					} else {
 						$state = State::withTrashed()->find($state_data['id']);
-						if ($this->data['theme'] != 'theme2') {
-							$state->updated_by_id = Auth::user()->id;
-						}
+						$state->updated_by_id = Auth::user()->id;
 						$state->updated_at = Carbon::now();
 					}
 					if ($state_data['status'] == 'Inactive') {
-						if ($this->data['theme'] != 'theme2') {
-							$state->deleted_by_id = Auth::user()->id;
-						}
+						$state->deleted_by_id = Auth::user()->id;
 						$state->deleted_at = Carbon::now();
 					} else {
-						if ($this->data['theme'] != 'theme2') {
-							$state->deleted_by_id = NULL;
-						}
+						$state->deleted_by_id = NULL;
 						$state->deleted_at = NULL;
 					}
 					$state->country_id = $country->id;

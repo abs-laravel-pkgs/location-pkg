@@ -50,7 +50,7 @@ class StateController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function getStateList(Request $request) {
+	public function getStatePkgList(Request $request) {
 		$states = State::withTrashed()
 			->select(
 				'states.id',

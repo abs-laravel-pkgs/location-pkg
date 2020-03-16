@@ -6,7 +6,7 @@ app.component('countryListPkg', {
         self.hasPermission = HelperService.hasPermission;
         self.add_permission = self.hasPermission('add-country');
         var table_scroll;
-        table_scroll = $('.page-main-content').height() - 37;
+        table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#country_list').DataTable({
             "dom": cndn_dom_structure,
             "language": {
@@ -51,8 +51,8 @@ app.component('countryListPkg', {
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'countries.name' },
                 { data: 'code', name: 'countries.code' },
-                // { data: 'iso_code', name: 'countries.iso_code' },
-                // { data: 'mobile_code', name: 'countries.mobile_code' },
+                { data: 'iso_code', name: 'countries.iso_code' },
+                { data: 'mobile_code', name: 'countries.mobile_code' },
                 { data: 'states', name: 'states', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {

@@ -1,12 +1,15 @@
-app.component('stateList', {
+app.component('stateListPkg', {
     templateUrl: state_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
+        self.add_permission = self.hasPermission('add-city');
+        var table_scroll;
+        table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#state_list').DataTable({
-            "dom": dom_structure,
+            "dom": cndn_dom_structure,
             "language": {
                 "search": "",
                 "searchPlaceholder": "Search",
@@ -16,13 +19,25 @@ app.component('stateList', {
                     "previous": '<i class="icon ion-ios-arrow-back"></i>'
                 },
             },
+            pageLength: 10,
             processing: true,
+            stateSaveCallback: function(settings, data) {
+                localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function(settings) {
+                var state_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+                if (state_save_val) {
+                    $('#search_state').val(state_save_val.search.search);
+                }
+                return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+            },
             serverSide: true,
             paging: true,
             stateSave: true,
-            "ordering": false,
+            scrollY: table_scroll + "px",
+            scrollCollapse: true,
             ajax: {
-                url: laravel_routes['getStateList'],
+                url: laravel_routes['getStatePkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
@@ -41,36 +56,28 @@ app.component('stateList', {
                 { data: 'country_name', name: 'countries.name' },
                 { data: 'country_code', name: 'countries.code' },
             ],
-            "initComplete": function(settings, json) {
-                $('.dataTables_length select').select2();
-                $('#modal-loading').modal('hide');
-            },
             "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html(total + ' / ' + max)
+                $('#table_info').html(total)
+                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
         });
+        $('.dataTables_length select').select2();
 
-        /* Page Title Appended */
-        $('.page-header-content .display-inline-block .data-table-title').html('States <span class="badge badge-secondary" id="table_info">0</span>');
-        $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
-        $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
-        if (self.hasPermission('add-state')) {
-            // var addnew_block = $('#add_new_wrap').html();
-            $('.page-header-content .alignment-right .add_new_button').html(
-                '<a href="#!/location-pkg/state/add" role="button" class="btn btn-secondary">Add New</a>' +
-                '<a role="button" id="open" data-toggle="modal"  data-target="#modal-state-filter" class="btn btn-img"> <img src="' + image_scr + '" alt="Filter" onmouseover=this.src="' + image_scr1 + '" onmouseout=this.src="' + image_scr + '"></a>'
-                // '' + addnew_block + ''
-            );
-        }
-        $('.btn-add-close').on("click", function() {
-            $('#state_list').DataTable().search('').draw();
+        $('.refresh_table').on("click", function() {
+            $('#state_list').DataTable().ajax.reload();
         });
 
-        $('.btn-refresh').on("click", function() {
-            $('#state_list').DataTable().ajax.reload();
+        $scope.clear_search = function() {
+            $('#search_state').val('');
+            $('#state_list').DataTable().search('').draw();
+        }
+
+        var dataTables = $('#state_list').dataTable();
+        $("#search_state").keyup(function() {
+            dataTables.fnFilter(this.value);
         });
 
         //FOCUS ON SEARCH FIELD

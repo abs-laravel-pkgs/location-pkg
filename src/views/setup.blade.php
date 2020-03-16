@@ -28,7 +28,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
     //STATE
     when('/location-pkg/state/list', {
-        template: '<state-list></state-list>',
+        template: '<state-list-pkg></state-list-pkg>',
         title: 'States',
     }).
     when('/location-pkg/state/add', {

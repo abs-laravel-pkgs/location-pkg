@@ -164,29 +164,22 @@ class RegionController extends Controller {
 			DB::beginTransaction();
 			if (!$request->id) {
 				$region = new Region;
-				if ($this->data['theme'] != 'theme2') {
-					$region->created_by_id = Auth::user()->id;
-				}
+				$region->created_by_id = Auth::user()->id;
 				$region->created_at = Carbon::now();
 				$region->updated_at = NULL;
 			} else {
 				$region = Region::withTrashed()->find($request->id);
-				if ($this->data['theme'] != 'theme2') {
-					$region->updated_by_id = Auth::user()->id;
-				}
+				$region->updated_by_id = Auth::user()->id;
 				$region->updated_at = Carbon::now();
 			}
 			$region->fill($request->all());
 			$region->company_id = Auth::user()->company_id;
 			if ($request->status == 'Inactive') {
 				$region->deleted_at = Carbon::now();
-				if ($this->data['theme'] != 'theme2') {
-					$region->deleted_by_id = Auth::user()->id;
-				}
+				$region->deleted_by_id = Auth::user()->id;
+
 			} else {
-				if ($this->data['theme'] != 'theme2') {
-					$region->deleted_by_id = NULL;
-				}
+				$region->deleted_by_id = NULL;
 				$region->deleted_at = NULL;
 			}
 			$region->save();

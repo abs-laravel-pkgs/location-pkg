@@ -12,6 +12,7 @@
                 <div class="page-header-content title-block">
                     <h1 class="title">{{$ctrl.action}} Country</h1>
                     <p class="subtitle">
+                        Masters /
                         <a href="#!/location-pkg/country/list">
                             Countries
                         </a> /
@@ -62,10 +63,10 @@
                                                 <span class="grid-col-label">Country Code</span>
                                                 <span class="grid-col-value">{{$ctrl.country.code}}</span>
                                             </li>
-                                            <!-- <li class="grid-col-3">
+                                            <li class="grid-col-3">
                                                 <span class="grid-col-label">ISO Code</span>
-                                                <span class="grid-col-value">{{$ctrl.country.iso_code}}</span>
-                                            </li> 
+                                                <span class="grid-col-value">{{$ctrl.country.iso_code ? $ctrl.country.iso_code : '--'}}</span>
+                                            </li>
                                             <li class="grid-col-3">
                                                 <span class="grid-col-label">Mobile Code</span>
                                                 <span class="grid-col-value">{{$ctrl.country.mobile_code ? $ctrl.country.mobile_code : '--'}}</span>
@@ -73,7 +74,7 @@
                                             <li class="grid-col-3">
                                                 <span class="grid-col-label">Has State List</span>
                                                 <span class="grid-col-value">{{$ctrl.country.has_state_list ? 'Yes' : 'No'}}</span>
-                                            </li> -->
+                                            </li>
                                             <li class="grid-col-3">
                                                 <span class="grid-col-label">Active Status</span>
                                                 <span class="grid-col-value {{$ctrl.country.deleted_at ==NULL ? 'color-green' : 'color-red'}}">{{$ctrl.country.deleted_at ? 'Inactive': 'Active'}}</span>

@@ -152,28 +152,28 @@ class CityController extends Controller {
 			DB::beginTransaction();
 			if (!$request->id) {
 				$city = new City;
-				if ($this->data['theme'] != 'theme2') {
-					$city->created_by_id = Auth::user()->id;
-				}
+
+				$city->created_by_id = Auth::user()->id;
+
 				$city->created_at = Carbon::now();
 				$city->updated_at = NULL;
 			} else {
 				$city = City::withTrashed()->find($request->id);
-				if ($this->data['theme'] != 'theme2') {
-					$city->updated_by_id = Auth::user()->id;
-				}
+
+				$city->updated_by_id = Auth::user()->id;
+
 				$city->updated_at = Carbon::now();
 			}
 			$city->fill($request->all());
 			if ($request->status == 'Inactive') {
 				$city->deleted_at = Carbon::now();
-				if ($this->data['theme'] != 'theme2') {
-					$city->deleted_by_id = Auth::user()->id;
-				}
+
+				$city->deleted_by_id = Auth::user()->id;
+
 			} else {
-				if ($this->data['theme'] != 'theme2') {
-					$city->deleted_by_id = NULL;
-				}
+
+				$city->deleted_by_id = NULL;
+
 				$city->deleted_at = NULL;
 			}
 			$city->save();

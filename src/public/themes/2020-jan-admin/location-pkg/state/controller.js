@@ -22,7 +22,7 @@ app.component('stateList', {
             stateSave: true,
             "ordering": false,
             ajax: {
-                url: laravel_routes['getStateList'],
+                url: laravel_routes['getStatePkgList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
