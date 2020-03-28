@@ -111,12 +111,12 @@ class StateController extends Controller {
 
 				$action = '';
 				if (Entrust::can('edit-state')) {
-					$action .= '<a href="#!/location-pkg/state/edit/' . $state->id . '">
+					$action .= '<a href="#!/location-pkg/state/edit/' . $state->id . '" title="Edit">
 						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>';
 				}
 				if (Entrust::can('view-state')) {
-					$action .= '<a href="#!/location-pkg/state/view/' . $state->id . '">
+					$action .= '<a href="#!/location-pkg/state/view/' . $state->id . '" title="View">
 						<img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
 					</a>';
 

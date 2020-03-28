@@ -87,12 +87,12 @@ class CountryController extends Controller {
 
 				$action = '';
 				if (Entrust::can('edit-country')) {
-					$action .= '<a href="#!/location-pkg/country/edit/' . $countries->id . '">
+					$action .= '<a href="#!/location-pkg/country/edit/' . $countries->id . '" title=""Edit>
 						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>';
 				}
 				if (Entrust::can('view-country')) {
-					$action .= '<a href="#!/location-pkg/country/view/' . $countries->id . '">
+					$action .= '<a href="#!/location-pkg/country/view/' . $countries->id . '" title="View">
 						<img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
 					</a>';
 
