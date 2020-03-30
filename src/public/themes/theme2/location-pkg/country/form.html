@@ -73,7 +73,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Mobile Code</label>
-                                                <input type="text" name="mobile_code" ng-model='$ctrl.country.mobile_code' class="form-control" placeholder="Eg: +91">
+                                                <input type="text" name="mobile_code" pattern="^[+\-]?[0-9]+(\.0*)?$" ng-model='$ctrl.country.mobile_code' class="form-control" placeholder="Eg: +91">
                                             </div>
                                         </div>
                                         <div class="col-md-3">

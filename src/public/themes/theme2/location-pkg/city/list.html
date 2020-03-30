@@ -7,7 +7,7 @@
                     <!-- <p class="subtitle">Masters / JV Masters / JV Types</p> -->
                 </div><!-- Page Header Content -->
                 <div class="page-header-content button-block">
-                    <button class="btn btn-bordered my-tooltip" data-toggle="modal" data-target="#modal-city-filter" ng-shortcut="'meta+shift+f'" ng-shortcut-click data-title="ctrl+shift+f"><i class="icon ion-md-funnel"></i>Filter</button>
+                    <button class="btn btn-bordered my-tooltip" data-toggle="modal" data-target="#modal-city-filter" ng-shortcut="'ctrl+shift+f'" ng-shortcut-click data-title="ctrl+shift+f"><i class="icon ion-md-funnel"></i>Filter</button>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
             <div class="page-header-content-right">
@@ -19,7 +19,7 @@
                 </div><!-- Page Header Content -->
                 <div class="page-header-content reset-block">
                     <div class="reset-wrap">
-                        <button class="btn-reset reset-tooltip refresh_table my-tooltip" ng-shortcut="'meta+shift+r'" ng-shortcut-click data-title="ctrl+shift+r">
+                        <button class="btn-reset reset-tooltip refresh_table my-tooltip" ng-shortcut="'ctrl+shift+r'" ng-shortcut-click data-title="ctrl+shift+r">
                             <img class="img-responsive" src="./public/theme/img/content/reset.svg" alt="Reset" />
                         </button>
                     </div>
@@ -28,12 +28,12 @@
                     <div class="search_filter">
                         <label>
                             <input type="search" id="search_city" class="form-control" placeholder="Search" autofocus />
-                            <button class="btn-clear my-tooltip" ng-click="clear_search()" ng-shortcut="'meta+shift+c'" ng-shortcut-click data-title="ctrl+shift+c">Clear</button>
+                            <button class="btn-clear" ng-click="clear_search()" ng-shortcut="'ctrl+shift+c'" ng-shortcut-click data-title="ctrl+shift+c">Clear</button>
                         </label>
                     </div><!-- Search Filter -->
                 </div><!-- Page Header Content -->
                 <div class="page-header-content button-block" ng-show="$ctrl.add_permission">
-                    <a href="#!/location-pkg/city/add" class="btn btn-primary my-tooltip" ng-shortcut="'meta+shift+n'" ng-shortcut-click data-title="ctrl+shift+n">Add New</a>
+                    <a href="#!/location-pkg/city/add" class="btn btn-primary" ng-shortcut="'ctrl+shift+n'" ng-shortcut-click data-title="ctrl+shift+n">Add New</a>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Right -->
         </div><!-- Page Header Inner -->
@@ -119,7 +119,7 @@
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.status='';$ctrl.city.state_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
+                        <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.status='';$ctrl.city.state_id=''" ng-shortcut="'ctrl+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
                     </div>
                 </div><!-- Row -->
             </div><!-- Modal Body -->

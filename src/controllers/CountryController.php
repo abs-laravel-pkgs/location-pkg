@@ -87,7 +87,7 @@ class CountryController extends Controller {
 
 				$action = '';
 				if (Entrust::can('edit-country')) {
-					$action .= '<a href="#!/location-pkg/country/edit/' . $countries->id . '" title=""Edit>
+					$action .= '<a href="#!/location-pkg/country/edit/' . $countries->id . '" title="Edit">
 						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>';
 				}
@@ -178,20 +178,22 @@ class CountryController extends Controller {
 						'required:true',
 						'max:2',
 						'min:1',
+						'regex:/^[a-zA-Z]+$/u',
 						'unique:countries,code,' . $request->id . ',id',
 					],
 					'name' => [
 						'required:true',
 						'max:64',
+						'regex:/^[a-zA-Z]+$/u',
 						'min:3',
 						'unique:countries,name,' . $request->id . ',id',
 					],
-					// 'iso_code' => [
-					// 	'required:true',
-					// 	'max:3',
-					// 	'min:1',
-					// 	'unique:countries,iso_code,' . $request->id . ',id',
-					// ],
+					'iso_code' => [
+						//'required:true',
+						//'max:3',
+						//'min:1',
+						'unique:countries,iso_code,' . $request->id . ',id',
+					],
 					// 'mobile_code' => 'nullable|max:10',
 				], $error_messages);
 				if ($validator->fails()) {
@@ -202,6 +204,8 @@ class CountryController extends Controller {
 					'code.required' => 'Country Code is Required',
 					'code.max' => 'Country Code Maximum 2 Characters',
 					'code.min' => 'Country Code Minimum 1 Characters',
+					'code.regex' => 'Country Code should not contain any numbers',
+					'name.regex' => 'Country Name should not contain any numbers',
 					'code.unique' => 'Country Code is already taken',
 					'name.required' => 'Country Name is Required',
 					'name.max' => 'Country Name Maximum 64 Characters',

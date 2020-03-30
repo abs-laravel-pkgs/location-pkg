@@ -7,6 +7,7 @@ app.component('stateListPkg', {
         self.hasPermission = HelperService.hasPermission;
          $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
+            $('#search_state').focus();
         if (!self.hasPermission('states')) {
             window.location = "#!/page-permission-denied";
             return false;
@@ -87,9 +88,7 @@ app.component('stateListPkg', {
         });
 
         //FOCUS ON SEARCH FIELD
-        setTimeout(function() {
-            $('div.dataTables_filter input').focus();
-        }, 2500);
+        
 
         //DELETE
         $scope.deleteState = function($id) {
@@ -108,6 +107,8 @@ app.component('stateListPkg', {
                     custom_noty('success', 'State Deleted Successfully');
                     $('#state_list').DataTable().ajax.reload();
                     $location.path('/location-pkg/state/list');
+            $('#search_state').focus();
+
                 }
             });
         }
@@ -158,6 +159,7 @@ app.component('stateListPkg', {
             $("#code").val('');
             $("#filter_country_id").val('');
             $("#status").val('');
+            $scope.$apply();
             datatables.fnFilter();
         }
 
@@ -176,6 +178,9 @@ app.component('stateForm', {
             window.location = "#!/page-permission-denied";
             return false;
         }
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
+
         self.region_permission = self.hasPermission('regions');
         self.city_permission = self.hasPermission('cities');
         self.angular_routes = angular_routes;
@@ -271,7 +276,9 @@ app.component('stateForm', {
             minlength: 3,
             maxlength: 191,
         });
-
+$.validator.addMethod("alpha", function(value, element) {
+    return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
+ });
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -280,14 +287,24 @@ app.component('stateForm', {
                     required: true,
                     minlength: 1,
                     maxlength: 2,
+                    alpha:true,
                 },
                 'name': {
                     required: true,
                     minlength: 3,
                     maxlength: 191,
+                    alpha:true,
                 },
                 'country_id': {
                     required: true,
+                },
+            },
+             messages: {
+                'code': {
+                    alpha: "Enter only alphabets",
+                },
+                'name': {
+                    alpha: "Enter only alphabets",
                 },
             },
             invalidHandler: function(event, validator) {
@@ -308,6 +325,8 @@ app.component('stateForm', {
                             custom_noty('success', res.message);
                             $location.path('/location-pkg/state/list');
                             $scope.$apply();
+            $('#search_state').focus();
+
                         } else {
                             if (!res.success == true) {
                                 $('.submit').button('reset');
@@ -319,6 +338,8 @@ app.component('stateForm', {
                             } else {
                                 $('.submit').button('reset');
                                 $location.path('/location-pkg/state/list');
+            $('div.dataTables_filter input').focus();
+
                                 $scope.$apply();
                             }
                         }
@@ -337,6 +358,8 @@ app.component('stateView', {
     templateUrl: state_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-state')) {
             window.location = "#!/page-permission-denied";

@@ -3,6 +3,9 @@ app.component('cityListPkg', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
+        $('#search_city').focus();
+ $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('cities')) {
             window.location = "#!/page-permission-denied";
@@ -83,9 +86,7 @@ app.component('cityListPkg', {
         });
 
         //FOCUS ON SEARCH FIELD
-        setTimeout(function() {
-            $('div.dataTables_filter input').focus();
-        }, 2500);
+        
 
         //DELETE
         $scope.deleteCity = function($id) {
@@ -104,6 +105,7 @@ app.component('cityListPkg', {
                     custom_noty('success', 'City Deleted Successfully');
                     $('#city_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/location-pkg/city/list');
+                    $('#search_city').focus();
                 }
             });
         }
@@ -112,8 +114,8 @@ app.component('cityListPkg', {
         $http.get(
             laravel_routes['getCityFilter']
         ).then(function(response) {
-            // console.log(response);
             self.city_list = response.data.country_list;
+            self.country_list = response.data.country_list;
         });
         self.status = [
             { id: '', name: 'Select Status' },
@@ -195,6 +197,9 @@ app.component('cityForm', {
             window.location = "#!/page-permission-denied";
             return false;
         }
+        $('#name').focus();
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.angular_routes = angular_routes;
         $http.get(
             laravel_routes['getCityFormData'], {
@@ -281,6 +286,8 @@ app.component('cityForm', {
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/location-pkg/city/list');
+                                $('#search_city').focus();
+
                                 $scope.$apply();
                             }
                         }
@@ -299,6 +306,8 @@ app.component('cityView', {
     templateUrl: city_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-city')) {
             window.location = "#!/page-permission-denied";

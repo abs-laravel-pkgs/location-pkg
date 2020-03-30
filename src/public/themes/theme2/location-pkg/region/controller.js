@@ -5,6 +5,9 @@ app.component('regionListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
+        $('#search_region').focus();
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.add_permission = self.hasPermission('add-region');
         if (!self.hasPermission('regions')) {
             window.location = "#!/page-permission-denied";
@@ -83,11 +86,6 @@ app.component('regionListPkg', {
             dataTables.fnFilter(this.value);
         });
 
-        //FOCUS ON SEARCH FIELD
-        setTimeout(function() {
-            $('div.dataTables_filter input').focus();
-        }, 2500);
-
         //DELETE
         $scope.deleteRegion = function($id) {
             $('#region_id').val($id);
@@ -105,6 +103,7 @@ app.component('regionListPkg', {
                     custom_noty('success', 'Region Deleted Successfully');
                     $('#regions_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/location-pkg/region/list');
+                    $('#search_region').focus();
                 }
             });
         }
@@ -153,8 +152,8 @@ app.component('regionListPkg', {
         $scope.reset_filter = function() {
             $("#name").val('');
             $("#code").val('');
-            $("#status").val('');
             $("#filter_state_id").val('');
+            $("#status").find('select').prop('selectedIndex',0).trigger('change');
             dataTables.fnFilter();
         }
 
@@ -167,6 +166,9 @@ app.component('regionFormPkg', {
     templateUrl: region_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
+        $('#name').focus();
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('add-region') || !self.hasPermission('edit-region')) {
             window.location = "#!/page-permission-denied";
@@ -247,6 +249,8 @@ app.component('regionFormPkg', {
                         if (res.success == true) {
                             custom_noty('success', res.message);
                             $location.path('/location-pkg/region/list');
+        $('#search_region').focus();
+
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -259,6 +263,8 @@ app.component('regionFormPkg', {
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/location-pkg/region/list');
+        $('#search_region').focus();
+
                                 $scope.$apply();
                             }
                         }
@@ -277,6 +283,8 @@ app.component('regionViewPkg', {
     templateUrl: region_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-region')) {
             window.location = "#!/page-permission-denied";

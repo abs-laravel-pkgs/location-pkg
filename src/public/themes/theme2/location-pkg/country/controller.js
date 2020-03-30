@@ -244,7 +244,9 @@ app.component('countryForm', {
             minlength: 1,
             maxlength: 2,
         });
-
+$.validator.addMethod("alpha", function(value, element) {
+    return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
+ });
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -253,19 +255,33 @@ app.component('countryForm', {
                     required: true,
                     minlength: 1,
                     maxlength: 2,
+                    alpha:true,
                 },
                 'name': {
                     required: true,
                     minlength: 3,
+                    alpha:true,
                     maxlength: 64,
                 },
                 'iso_code': {
                     required: true,
                     minlength: 1,
+                    alpha:true,
                     maxlength: 3,
                 },
                 'mobile_code': {
                     maxlength: 10,
+                },
+            },
+            messages: {
+                'code': {
+                    alpha: "Enter only alphabets",
+                },
+                'name': {
+                    alpha: "Enter only alphabets",
+                },
+                'iso_code': {
+                    alpha: "Enter only alphabets",
                 },
             },
             invalidHandler: function(event, validator) {
