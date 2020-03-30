@@ -3,12 +3,15 @@ app.component('countryListPkg', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element, $mdSelect) {
         $scope.loading = true;
         var self = this;
+        $('#search_country').focus();
         self.hasPermission = HelperService.hasPermission;
         self.add_permission = self.hasPermission('add-country');
         if (!self.hasPermission('countries')) {
             window.location = "#!/page-permission-denied";
             return false;
         }
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#country_list').DataTable({
@@ -105,6 +108,8 @@ app.component('countryListPkg', {
                     custom_noty('success', 'Country Deleted Successfully');
                     $('#country_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/location-pkg/country/list');
+        $('#search_country').focus();
+
                 }
             });
         }
@@ -160,11 +165,14 @@ app.component('countryForm', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         //get_form_data_url = typeof($routeParams.id) == 'undefined' ? country_get_form_data_url : country_get_form_data_url + '/' + $routeParams.id;
         var self = this;
+        $('#country_name').focus();
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('add-country') || !self.hasPermission('edit-country')) {
             window.location = "#!/page-permission-denied";
             return false;
         }
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         self.state_permission = self.hasPermission('states')
         self.angular_routes = angular_routes;
         $http.get(
@@ -290,6 +298,7 @@ app.component('countryForm', {
                                 $('.submit').button('reset');
                                 $location.path('/location-pkg/country/list');
                                 $scope.$apply();
+                                $('#search_country').focus();
                             }
                         }
                     })

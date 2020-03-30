@@ -5,6 +5,8 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
+         $('li').removeClass('active');
+        $('.master_link').addClass('active').trigger('click');
         if (!self.hasPermission('states')) {
             window.location = "#!/page-permission-denied";
             return false;

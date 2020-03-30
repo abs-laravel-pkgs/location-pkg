@@ -333,8 +333,8 @@ class CountryController extends Controller {
 					$activity->module = 'State Master';
 					$activity->entity_id = $state->id;
 					$activity->entity_type_id = 363;
-					$activity->activity_id = $request->id == NULL ? 280 : 281;
-					$activity->activity = $request->id == NULL ? 280 : 281;
+					$activity->activity_id = $state_data['id'] == NULL ? 280 : 281;
+					$activity->activity = $state_data['id'] == NULL ? 280 : 281;
 					$activity->details = json_encode($activity);
 					$activity->save();
 				}
