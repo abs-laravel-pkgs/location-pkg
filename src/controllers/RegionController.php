@@ -78,12 +78,12 @@ class RegionController extends Controller {
 
 				$action = '';
 				if (Entrust::can('edit-region')) {
-					$action .= '<a href="#!/location-pkg/region/edit/' . $region->id . '">
+					$action .= '<a href="#!/location-pkg/region/edit/' . $region->id . '" title="Edit">
 						<img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>';
 				}
 				if (Entrust::can('view-region')) {
-					$action .= '<a href="#!/location-pkg/region/view/' . $region->id . '">
+					$action .= '<a href="#!/location-pkg/region/view/' . $region->id . '" title="View">
 						<img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
 					</a>';
 
