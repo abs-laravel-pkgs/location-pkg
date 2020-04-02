@@ -5,7 +5,7 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
-         $('li').removeClass('active');
+         // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
             $('#search_state').focus();
         if (!self.hasPermission('states')) {
@@ -178,7 +178,7 @@ app.component('stateForm', {
             window.location = "#!/page-permission-denied";
             return false;
         }
-         $('li').removeClass('active');
+         // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
 
         self.region_permission = self.hasPermission('regions');
@@ -209,21 +209,6 @@ app.component('stateForm', {
                 self.switch_value = 'Active';
             }
         });
-
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
 
         //ADD REGIONS
         $scope.add_region = function() {
@@ -301,9 +286,13 @@ $.validator.addMethod("alpha", function(value, element) {
             },
              messages: {
                 'code': {
+                    minlength: "Minimum 1 Character",
+                    maxlength: "Maximum 2 Characters",
                     alpha: "Enter only alphabets",
                 },
                 'name': {
+                    minlength: "Minimum 3 Character",
+                    maxlength: "Maximum 191 Characters",
                     alpha: "Enter only alphabets",
                 },
             },
@@ -358,7 +347,7 @@ app.component('stateView', {
     templateUrl: state_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
-         $('li').removeClass('active');
+         // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-state')) {
@@ -382,19 +371,5 @@ app.component('stateView', {
             self.action = response.data.action;
             self.theme = response.data.theme;
         });
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
     }
 });
