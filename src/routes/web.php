@@ -34,6 +34,7 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::get('/region/delete', 'RegionController@deleteRegionPkg')->name('deleteRegionPkg');
 	Route::get('/region/view', 'RegionController@viewRegionPkg')->name('viewRegionPkg');
 	Route::get('/region/get-filter', 'RegionController@getRegionFilter')->name('getRegionFilter');
+	Route::post('/region/get-region-list', 'RegionController@getRegions')->name('getRegions');
 
 	//GET STATE BASED COUNTRY
 	Route::get('/states/get-state', 'StateController@getStateBasedCountry')->name('getStateBasedCountry');

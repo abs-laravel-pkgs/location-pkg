@@ -4,7 +4,9 @@ namespace Abs\LocationPkg;
 
 use Abs\HelperPkg\Traits\SeederTrait;
 use App\Company;
+use Abs\LocationPkg\State;
 use App\Config;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -65,4 +67,13 @@ class Region extends Model {
 		return $record;
 	}
 
+	public static function getRegions($request) {
+		$state_id = State::find($request->id);
+		// dd($state_id);
+		if (!$state_id) {
+			return response()->json(['success' => false, 'error' => 'State not found']);
+		}
+		$regions = collect(Region::where('state_id', $state_id->id)->where('company_id', Auth::user()->company_id)->select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Region']);
+		return response()->json(['success' => true, 'regions' => $regions]);
+	}
 }
