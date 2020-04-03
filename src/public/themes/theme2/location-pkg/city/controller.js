@@ -46,7 +46,7 @@ app.component('cityListPkg', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.city_name = $('#name').val();
+                    d.city_name = $('#filter_name').val();
                     d.filter_state_id = $('#filter_state_id').val();
                     d.country_id = $('#country_id').val();
                     d.status = $('#status').val();
@@ -113,7 +113,7 @@ app.component('cityListPkg', {
         $http.get(
             laravel_routes['getCityFilter']
         ).then(function(response) {
-            self.city_list = response.data.country_list;
+            // self.city_list = response.data.country_list;
             self.country_list = response.data.country_list;
         });
         self.status = [
@@ -143,7 +143,7 @@ app.component('cityListPkg', {
         $scope.onSelectedCountry = function(id) {
             if (id) {
                 self.state_list = [];
-                $("#country_id").val(id);
+                $("#filter_country_id").val(id);
                 datatables.fnFilter();
                 $http.get(
                     laravel_routes['getStateBasedCountry'], {
@@ -163,20 +163,21 @@ app.component('cityListPkg', {
         }
 
         var datatables = $('#city_list').dataTable();
-        $('#name').on('keyup', function() {
+        $('#filter_name').on('keyup', function() {
             datatables.fnFilter();
         });
-        $scope.onSelectedStatus = function(val) {
-            $("#status").val(val);
+        $scope.onSelectedStatus = function(id) {
+            $("#status").val(id);
             datatables.fnFilter();
         }
-        $scope.onSelectedState = function(val) {
-            $("#filter_state_id").val(val);
+        $scope.onSelectedState = function(id) {
+            $("#filter_state_id").val(id);
             datatables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
+            $("#filter_name").val('');
             $("#code").val('');
+            $("#country_id").val('');
             $("#status").val('');
             $("#filter_state_id").val('');
             datatables.fnFilter();

@@ -49,7 +49,7 @@ app.component('stateListPkg', {
                 dataType: "json",
                 data: function(d) {
                     d.state_code = $('#code').val();
-                    d.state_name = $('#name').val();
+                    d.state_name = $('#filter_name').val();
                     d.status = $('#status').val();
                     d.filter_country_id = $('#filter_country_id').val();
                 },
@@ -140,7 +140,7 @@ app.component('stateListPkg', {
         });
 
         var datatables = $('#state_list').dataTable();
-        $('#name').on('keyup', function() {
+        $('#filter_name').on('keyup', function() {
             datatables.fnFilter();
         });
         $('#code').on('keyup', function() {
@@ -155,7 +155,7 @@ app.component('stateListPkg', {
             datatables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
+            $("#filter_name").val('');
             $("#code").val('');
             $("#filter_country_id").val('');
             $("#status").val('');

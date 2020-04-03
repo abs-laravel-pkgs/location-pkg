@@ -49,7 +49,7 @@ app.component('regionListPkg', {
                 dataType: "json",
                 data: function(d) {
                     d.region_code = $('#code').val();
-                    d.region_name = $('#name').val();
+                    d.region_name = $('#filter_name').val();
                     d.filter_state_id = $('#filter_state_id').val();
                     d.status = $('#status').val();
                 },
@@ -138,7 +138,7 @@ app.component('regionListPkg', {
         $('#code').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $('#name').on('keyup', function() {
+        $('#filter_name').on('keyup', function() {
             dataTables.fnFilter();
         });
         $scope.onSelectedStatus = function(val) {
@@ -150,7 +150,7 @@ app.component('regionListPkg', {
             dataTables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
+            $("#filter_name").val('');
             $("#code").val('');
             $("#filter_state_id").val('');
             $("#status").find('select').prop('selectedIndex', 0).trigger('change');
