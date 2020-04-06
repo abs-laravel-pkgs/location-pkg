@@ -4,6 +4,7 @@ app.component('cityListPkg', {
         $scope.loading = true;
         var self = this;
         $('#search_city').focus();
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('cities')) {

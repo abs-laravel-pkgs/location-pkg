@@ -5,7 +5,7 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
-         // $('li').removeClass('active');
+         $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
             $('#search_state').focus();
         if (!self.hasPermission('states')) {

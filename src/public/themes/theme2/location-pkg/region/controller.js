@@ -6,7 +6,7 @@ app.component('regionListPkg', {
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
         $('#search_region').focus();
-        // $('li').removeClass('active');
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.add_permission = self.hasPermission('add-region');
         if (!self.hasPermission('regions')) {
