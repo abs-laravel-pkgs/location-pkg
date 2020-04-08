@@ -73,13 +73,13 @@
                     <div class="col-md-6">
                         <div class="input-text form-group">
                             <label>State Name</label>
-                            <input type="text" class="form-control" name="name" id="filter_name" placeholder="Enter State Name" aria-invalid="false" autocomplete="off">
+                            <input type="text" class="form-control" name="name" id="state_name" placeholder="Enter State Name" aria-invalid="false" autocomplete="off">
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-6">
                         <div class="input-text form-group">
                             <label>State Code</label>
-                            <input type="text" class="form-control" name="code" id="code" placeholder="Enter State Code" aria-invalid="false" autocomplete="off">
+                            <input type="text" class="form-control" name="code" id="state_code" placeholder="Enter State Code" aria-invalid="false" autocomplete="off">
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-6">
@@ -104,14 +104,14 @@
                                     <input ng-model="searchTerm1" type="search" placeholder="Search for a Status" class="demo-header-searchbox md-text">
                                 </md-select-header>
                                 <md-optgroup>
-                                    <md-option ng-value="status.id" ng-repeat="status in $ctrl.status | filter:searchTerm1">{{status.name}}</md-option>
+                                    <md-option ng-value="status.id" ng-repeat="status in $ctrl.status_list | filter:searchTerm1">{{status.name}}</md-option>
                                 </md-optgroup>
                             </md-select>
                             <input type="hidden" class="form-control" name="status" id="status" value="">
                         </div><!-- Field -->
                     </div><!-- Column -->
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.status='';$ctrl.state.country_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
+                        <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.state.status='';$ctrl.state.country_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
                     </div>
                 </div><!-- Row -->
             </div><!-- Modal Body -->
