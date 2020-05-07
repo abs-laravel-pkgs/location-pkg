@@ -4,7 +4,7 @@ app.component('cityListPkg', {
         $scope.loading = true;
         var self = this;
         $('#search_city').focus();
- $('li').removeClass('active');
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('cities')) {
@@ -47,7 +47,7 @@ app.component('cityListPkg', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.city_name = $('#name').val();
+                    d.city_name = $('#filter_name').val();
                     d.filter_state_id = $('#filter_state_id').val();
                     d.country_id = $('#country_id').val();
                     d.status = $('#status').val();
@@ -86,7 +86,7 @@ app.component('cityListPkg', {
         });
 
         //FOCUS ON SEARCH FIELD
-        
+
 
         //DELETE
         $scope.deleteCity = function($id) {
@@ -114,7 +114,7 @@ app.component('cityListPkg', {
         $http.get(
             laravel_routes['getCityFilter']
         ).then(function(response) {
-            self.city_list = response.data.country_list;
+            // self.city_list = response.data.country_list;
             self.country_list = response.data.country_list;
         });
         self.status = [
@@ -144,7 +144,7 @@ app.component('cityListPkg', {
         $scope.onSelectedCountry = function(id) {
             if (id) {
                 self.state_list = [];
-                $("#country_id").val(id);
+                $("#filter_country_id").val(id);
                 datatables.fnFilter();
                 $http.get(
                     laravel_routes['getStateBasedCountry'], {
@@ -164,20 +164,21 @@ app.component('cityListPkg', {
         }
 
         var datatables = $('#city_list').dataTable();
-        $('#name').on('keyup', function() {
+        $('#filter_name').on('keyup', function() {
             datatables.fnFilter();
         });
-        $scope.onSelectedStatus = function(val) {
-            $("#status").val(val);
+        $scope.onSelectedStatus = function(id) {
+            $("#status").val(id);
             datatables.fnFilter();
         }
-        $scope.onSelectedState = function(val) {
-            $("#filter_state_id").val(val);
+        $scope.onSelectedState = function(id) {
+            $("#filter_state_id").val(id);
             datatables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
+            $("#filter_name").val('');
             $("#code").val('');
+            $("#country_id").val('');
             $("#status").val('');
             $("#filter_state_id").val('');
             datatables.fnFilter();
@@ -198,7 +199,6 @@ app.component('cityForm', {
             return false;
         }
         $('#name').focus();
-         $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.angular_routes = angular_routes;
         $http.get(
@@ -229,21 +229,6 @@ app.component('cityForm', {
             ev.stopPropagation();
         });
 
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
-
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -255,6 +240,13 @@ app.component('cityForm', {
                 },
                 'state_id': {
                     required: true,
+                },
+            },
+            messages: {
+                'name': {
+                    minlength: "Minimum 3 Characters",
+                    maxlength: "Maximum 255 Characters",
+                    alpha: "Enter only alphabets",
                 },
             },
             // invalidHandler: function(event, validator) {
@@ -306,7 +298,6 @@ app.component('cityView', {
     templateUrl: city_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
-         $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-city')) {

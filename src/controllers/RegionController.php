@@ -224,4 +224,8 @@ class RegionController extends Controller {
 			return response()->json(['success' => true]);
 		}
 	}
+
+	public function getRegions(Request $request) {
+		return Region::getRegions($request);
+	}
 }

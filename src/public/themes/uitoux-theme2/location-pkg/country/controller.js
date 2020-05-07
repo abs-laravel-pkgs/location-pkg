@@ -10,7 +10,7 @@ app.component('countryListPkg', {
             window.location = "#!/page-permission-denied";
             return false;
         }
-         $('li').removeClass('active');
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
@@ -108,7 +108,7 @@ app.component('countryListPkg', {
                     custom_noty('success', 'Country Deleted Successfully');
                     $('#country_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/location-pkg/country/list');
-        $('#search_country').focus();
+                    $('#search_country').focus();
 
                 }
             });
@@ -171,7 +171,7 @@ app.component('countryForm', {
             window.location = "#!/page-permission-denied";
             return false;
         }
-         $('li').removeClass('active');
+        // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.state_permission = self.hasPermission('states')
         self.angular_routes = angular_routes;
@@ -217,22 +217,6 @@ app.component('countryForm', {
 
         $("input:text:visible:first").focus();
 
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.cndn-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.cndn-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
-
-
         //VALIDATEOR FOR MULTIPLE 
         jQuery.validator.addClassRules("state_name", {
             required: true,
@@ -244,9 +228,9 @@ app.component('countryForm', {
             minlength: 1,
             maxlength: 2,
         });
-$.validator.addMethod("alpha", function(value, element) {
-    return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
- });
+        $.validator.addMethod("alpha", function(value, element) {
+            return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
+        });
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -255,18 +239,18 @@ $.validator.addMethod("alpha", function(value, element) {
                     required: true,
                     minlength: 1,
                     maxlength: 2,
-                    alpha:true,
+                    alpha: true,
                 },
                 'name': {
                     required: true,
                     minlength: 3,
-                    alpha:true,
+                    alpha: true,
                     maxlength: 64,
                 },
                 'iso_code': {
                     required: true,
                     minlength: 1,
-                    alpha:true,
+                    alpha: true,
                     maxlength: 3,
                 },
                 'mobile_code': {
@@ -275,13 +259,22 @@ $.validator.addMethod("alpha", function(value, element) {
             },
             messages: {
                 'code': {
+                    minlength: "Minimum 1 Character",
+                    maxlength: "Maximum 2 Characters",
                     alpha: "Enter only alphabets",
                 },
                 'name': {
+                    minlength: "Minimum 3 Characters",
+                    maxlength: "Maximum 64 Characters",
                     alpha: "Enter only alphabets",
                 },
                 'iso_code': {
+                    minlength: "Minimum 1 Character",
+                    maxlength: "Maximum 3 Characters",
                     alpha: "Enter only alphabets",
+                },
+                'mobile_code': {
+                    maxlength: "Maximum 10 Characters",
                 },
             },
             invalidHandler: function(event, validator) {
@@ -352,20 +345,5 @@ app.component('countryView', {
             self.action = response.data.action;
             self.theme = response.data.theme;
         });
-
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.cndn-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.cndn-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
     }
 });

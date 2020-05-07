@@ -5,17 +5,18 @@ app.component('stateListPkg', {
         var self = this;
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
-         $('li').removeClass('active');
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
-            $('#search_state').focus();
+        $('#search_state').focus();
         if (!self.hasPermission('states')) {
             window.location = "#!/page-permission-denied";
             return false;
         }
         self.add_permission = self.hasPermission('add-state');
         var table_scroll;
+        var dataTable;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
-        var dataTable = $('#state_list').DataTable({
+        dataTable = $('#state_list').DataTable({
             "dom": cndn_dom_structure,
             "language": {
                 "search": "",
@@ -48,8 +49,8 @@ app.component('stateListPkg', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.state_code = $('#code').val();
-                    d.state_name = $('#name').val();
+                    d.state_code = $('#state_code').val();
+                    d.state_name = $('#state_name').val();
                     d.status = $('#status').val();
                     d.filter_country_id = $('#filter_country_id').val();
                 },
@@ -82,13 +83,12 @@ app.component('stateListPkg', {
             $('#state_list').DataTable().search('').draw();
         }
 
-        var dataTables = $('#state_list').dataTable();
         $("#search_state").keyup(function() {
-            dataTables.fnFilter(this.value);
+            dataTable.draw(this.value);
         });
 
         //FOCUS ON SEARCH FIELD
-        
+
 
         //DELETE
         $scope.deleteState = function($id) {
@@ -107,7 +107,7 @@ app.component('stateListPkg', {
                     custom_noty('success', 'State Deleted Successfully');
                     $('#state_list').DataTable().ajax.reload();
                     $location.path('/location-pkg/state/list');
-            $('#search_state').focus();
+                    $('#search_state').focus();
 
                 }
             });
@@ -120,7 +120,7 @@ app.component('stateListPkg', {
             // console.log(response);
             self.country_list = response.data.country_list;
         });
-        self.status = [
+        self.status_list = [
             { id: '', name: 'Select Status' },
             { id: '1', name: 'Active' },
             { id: '0', name: 'Inactive' },
@@ -139,28 +139,26 @@ app.component('stateListPkg', {
             }
         });
 
-        var datatables = $('#state_list').dataTable();
-        $('#name').on('keyup', function() {
-            datatables.fnFilter();
+        $('#state_name').on('keyup', function() {
+            dataTable.draw();
         });
-        $('#code').on('keyup', function() {
-            datatables.fnFilter();
+        $('#state_code').on('keyup', function() {
+            dataTable.draw();
         });
         $scope.onSelectedStatus = function(val) {
             $("#status").val(val);
-            datatables.fnFilter();
+            dataTable.draw();
         }
         $scope.onSelectedCountry = function(val) {
             $("#filter_country_id").val(val);
-            datatables.fnFilter();
+            dataTable.draw();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
-            $("#code").val('');
+            $("#state_name").val('');
+            $("#state_code").val('');
             $("#filter_country_id").val('');
             $("#status").val('');
-            $scope.$apply();
-            datatables.fnFilter();
+            dataTable.draw();
         }
 
         $rootScope.loading = false;
@@ -178,7 +176,7 @@ app.component('stateForm', {
             window.location = "#!/page-permission-denied";
             return false;
         }
-         $('li').removeClass('active');
+        // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
 
         self.region_permission = self.hasPermission('regions');
@@ -210,20 +208,8 @@ app.component('stateForm', {
             }
         });
 
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
+        //FOCUS ON FIRST FIELD IN FORM
+        $("input:text:visible:first").focus();
 
         //ADD REGIONS
         $scope.add_region = function() {
@@ -276,9 +262,9 @@ app.component('stateForm', {
             minlength: 3,
             maxlength: 191,
         });
-$.validator.addMethod("alpha", function(value, element) {
-    return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
- });
+        $.validator.addMethod("alpha", function(value, element) {
+            return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
+        });
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -287,23 +273,27 @@ $.validator.addMethod("alpha", function(value, element) {
                     required: true,
                     minlength: 1,
                     maxlength: 2,
-                    alpha:true,
+                    alpha: true,
                 },
                 'name': {
                     required: true,
                     minlength: 3,
                     maxlength: 191,
-                    alpha:true,
+                    alpha: true,
                 },
                 'country_id': {
                     required: true,
                 },
             },
-             messages: {
+            messages: {
                 'code': {
+                    minlength: "Minimum 1 Character",
+                    maxlength: "Maximum 2 Characters",
                     alpha: "Enter only alphabets",
                 },
                 'name': {
+                    minlength: "Minimum 3 Character",
+                    maxlength: "Maximum 191 Characters",
                     alpha: "Enter only alphabets",
                 },
             },
@@ -325,7 +315,7 @@ $.validator.addMethod("alpha", function(value, element) {
                             custom_noty('success', res.message);
                             $location.path('/location-pkg/state/list');
                             $scope.$apply();
-            $('#search_state').focus();
+                            $('#search_state').focus();
 
                         } else {
                             if (!res.success == true) {
@@ -338,7 +328,7 @@ $.validator.addMethod("alpha", function(value, element) {
                             } else {
                                 $('.submit').button('reset');
                                 $location.path('/location-pkg/state/list');
-            $('div.dataTables_filter input').focus();
+                                $('div.dataTables_filter input').focus();
 
                                 $scope.$apply();
                             }
@@ -358,7 +348,7 @@ app.component('stateView', {
     templateUrl: state_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
-         $('li').removeClass('active');
+        // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-state')) {
@@ -382,19 +372,5 @@ app.component('stateView', {
             self.action = response.data.action;
             self.theme = response.data.theme;
         });
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
     }
 });

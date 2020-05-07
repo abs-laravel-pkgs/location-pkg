@@ -6,7 +6,7 @@ app.component('regionListPkg', {
         self.theme = admin_theme;
         self.hasPermission = HelperService.hasPermission;
         $('#search_region').focus();
-         $('li').removeClass('active');
+        $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.add_permission = self.hasPermission('add-region');
         if (!self.hasPermission('regions')) {
@@ -49,7 +49,7 @@ app.component('regionListPkg', {
                 dataType: "json",
                 data: function(d) {
                     d.region_code = $('#code').val();
-                    d.region_name = $('#name').val();
+                    d.region_name = $('#filter_name').val();
                     d.filter_state_id = $('#filter_state_id').val();
                     d.status = $('#status').val();
                 },
@@ -138,7 +138,7 @@ app.component('regionListPkg', {
         $('#code').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $('#name').on('keyup', function() {
+        $('#filter_name').on('keyup', function() {
             dataTables.fnFilter();
         });
         $scope.onSelectedStatus = function(val) {
@@ -150,10 +150,10 @@ app.component('regionListPkg', {
             dataTables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#name").val('');
+            $("#filter_name").val('');
             $("#code").val('');
             $("#filter_state_id").val('');
-            $("#status").find('select').prop('selectedIndex',0).trigger('change');
+            $("#status").find('select').prop('selectedIndex', 0).trigger('change');
             dataTables.fnFilter();
         }
 
@@ -167,7 +167,7 @@ app.component('regionFormPkg', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         $('#name').focus();
-         $('li').removeClass('active');
+        // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('add-region') || !self.hasPermission('edit-region')) {
@@ -199,21 +199,9 @@ app.component('regionFormPkg', {
             }
         });
 
-        /* Tab Funtion */
-        $('.btn-nxt').on("click", function() {
-            $('.editDetails-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
+        $.validator.addMethod("alpha", function(value, element) {
+            return this.optional(element) || value == value.match(/^[a-zA-Z ]*$/);
         });
-        $('.btn-prev').on("click", function() {
-            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
-        });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
-
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
@@ -222,14 +210,28 @@ app.component('regionFormPkg', {
                     required: true,
                     minlength: 1,
                     maxlength: 4,
+                    alpha: true,
                 },
                 'name': {
                     required: true,
                     minlength: 3,
                     maxlength: 191,
+                    alpha: true,
                 },
                 'state_id': {
                     required: true,
+                },
+            },
+            messages: {
+                'code': {
+                    minlength: "Minimum 1 Character",
+                    maxlength: "Maximum 4 Characters",
+                    alpha: "Enter only alphabets",
+                },
+                'name': {
+                    minlength: "Minimum 3 Characters",
+                    maxlength: "Maximum 191 Characters",
+                    alpha: "Enter only alphabets",
                 },
             },
             // invalidHandler: function(event, validator) {
@@ -249,7 +251,7 @@ app.component('regionFormPkg', {
                         if (res.success == true) {
                             custom_noty('success', res.message);
                             $location.path('/location-pkg/region/list');
-        $('#search_region').focus();
+                            $('#search_region').focus();
 
                             $scope.$apply();
                         } else {
@@ -263,7 +265,7 @@ app.component('regionFormPkg', {
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/location-pkg/region/list');
-        $('#search_region').focus();
+                                $('#search_region').focus();
 
                                 $scope.$apply();
                             }
@@ -283,7 +285,7 @@ app.component('regionViewPkg', {
     templateUrl: region_view_template_url,
     controller: function($http, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
-         $('li').removeClass('active');
+        // $('li').removeClass('active');
         $('.master_link').addClass('active').trigger('click');
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('view-region')) {
