@@ -100,4 +100,27 @@ class Country extends Model {
 		$record->save();
 		return $record;
 	}
+
+	public function states() {
+		return $this->hasMany('App\State');
+	}
+
+	public static function getDropDownList($params = [], $add_default = true, $default_text = 'Select Country') {
+		$list = Collect(Self::select([
+			'id',
+			'name',
+		])
+				->where(function ($q) use ($params) {
+					if (isset($params['state_id'])) {
+						$q->where('state_id', $params['state_id']);
+					}
+				})
+				->orderBy('name')
+				->get());
+		if ($add_default) {
+			$list->prepend(['id' => '', 'name' => $default_text]);
+		}
+		return $list;
+	}
+
 }

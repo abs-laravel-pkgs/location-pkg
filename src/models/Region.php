@@ -3,9 +3,8 @@
 namespace Abs\LocationPkg;
 
 use Abs\HelperPkg\Traits\SeederTrait;
-use App\Company;
 use Abs\LocationPkg\State;
-use App\Config;
+use App\Company;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,7 +28,7 @@ class Region extends Model {
 	}
 
 	public function state() {
-		return $this->belongsTo('Abs\LocationPkg\State');
+		return $this->belongsTo('App\State');
 	}
 
 	public static function createFromObject($record_data) {
@@ -47,9 +46,10 @@ class Region extends Model {
 			return;
 		}
 
-		$type = Config::where('name', $record_data->type)->where('config_type_id', 89)->first();
-		if (!$type) {
-			$errors[] = 'Invalid Tax Type : ' . $record_data->type;
+		$errors = [];
+		$state = State::where('name', $record_data->state)->first();
+		if (!$state) {
+			$errors[] = 'Invalid state : ' . $record_data->state;
 		}
 
 		if (count($errors) > 0) {
@@ -59,10 +59,10 @@ class Region extends Model {
 
 		$record = self::firstOrNew([
 			'company_id' => $company->id,
-			'name' => $record_data->tax_name,
+			'code' => $record_data->code,
 		]);
-		$record->type_id = $type->id;
-		$record->created_by_id = $admin->id;
+		$record->name = $record_data->region_name;
+		$record->state_id = $state->id;
 		$record->save();
 		return $record;
 	}
@@ -75,5 +75,23 @@ class Region extends Model {
 		}
 		$regions = collect(Region::where('state_id', $state_id->id)->where('company_id', Auth::user()->company_id)->select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Region']);
 		return response()->json(['success' => true, 'regions' => $regions]);
+	}
+
+	public static function getDropDownList($params = [], $add_default = true, $default_text = 'Select Region') {
+		$list = Collect(Self::select([
+			'id',
+			'name',
+		])
+				->where(function ($q) use ($params) {
+					if (isset($params['state_id'])) {
+						$q->where('state_id', $params['state_id']);
+					}
+				})
+				->orderBy('name')
+				->get());
+		if ($add_default) {
+			$list->prepend(['id' => '', 'name' => $default_text]);
+		}
+		return $list;
 	}
 }

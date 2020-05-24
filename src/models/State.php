@@ -4,8 +4,6 @@ namespace Abs\LocationPkg;
 
 use Abs\HelperPkg\Traits\SeederTrait;
 use App\Company;
-use App\Config;
-use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,10 +25,14 @@ class State extends Model {
 	}
 
 	public function country() {
-		return $this->belongsTo('Abs\LocationPkg\Country');
+		return $this->belongsTo('App\Country');
 	}
-	public function region() {
-		return $this->hasMany('Abs\LocationPkg\Region')->where('company_id', Auth::user()->company_id);
+	public function regions() {
+		return $this->hasMany('App\Region');
+	}
+
+	public function cities() {
+		return $this->hasMany('App\City');
 	}
 
 	public static function getStates($params) {
@@ -58,9 +60,11 @@ class State extends Model {
 			return;
 		}
 
-		$type = Config::where('name', $record_data->type)->where('config_type_id', 89)->first();
-		if (!$type) {
-			$errors[] = 'Invalid Tax Type : ' . $record_data->type;
+		$errors = [];
+
+		$country = Country::where('code', $record_data->country)->first();
+		if (!$country) {
+			$errors[] = 'Invalid country : ' . $record_data->country;
 		}
 
 		if (count($errors) > 0) {
@@ -69,12 +73,30 @@ class State extends Model {
 		}
 
 		$record = self::firstOrNew([
-			'company_id' => $company->id,
-			'name' => $record_data->tax_name,
+			'country_id' => $country->id,
+			'code' => $record_data->code,
 		]);
-		$record->type_id = $type->id;
-		$record->created_by_id = $admin->id;
+		$record->name = $record_data->state_name;
 		$record->save();
 		return $record;
 	}
+
+	public static function getDropDownList($params = [], $add_default = true, $default_text = 'Select State') {
+		$list = Collect(Self::select([
+			'id',
+			'name',
+		])
+				->where(function ($q) use ($params) {
+					if (isset($params['country_id'])) {
+						$q->where('country_id', $params['country_id']);
+					}
+				})
+				->orderBy('name')
+				->get());
+		if ($add_default) {
+			$list->prepend(['id' => '', 'name' => $default_text]);
+		}
+		return $list;
+	}
+
 }
