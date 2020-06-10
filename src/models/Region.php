@@ -94,4 +94,16 @@ class Region extends Model {
 		}
 		return $list;
 	}
+	public static function createFromCollection($records) {
+		foreach ($records as $key => $record_data) {
+			try {
+				if (!$record_data->company) {
+					continue;
+				}
+				$record = self::createFromObject($record_data);
+			} catch (Exception $e) {
+				dd($e);
+			}
+		}
+	}
 }
