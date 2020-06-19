@@ -37,6 +37,20 @@ class City extends Model {
 		return $city_list;
 	}
 
+	public static function searchCity($r) {
+		$key = $r->key;
+		$list = self::select(
+			'id',
+			'name'
+		)
+			->where(function ($q) use ($key) {
+				$q->where('name', 'like', $key . '%')
+				;
+			})
+			->get();
+		return response()->json($list);
+	}
+
 	public static function createFromObject($record_data) {
 
 		$errors = [];
