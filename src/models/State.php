@@ -15,6 +15,7 @@ class State extends Model {
 	protected $fillable = [
 		'code',
 		'name',
+		'e_invoice_state_code',
 		'country_id',
 	];
 
