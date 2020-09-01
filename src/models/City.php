@@ -39,15 +39,21 @@ class City extends Model {
 
 	public static function searchCity($r) {
 		$key = $r->key;
-		$list = self::select(
-			'id',
-			'name'
-		)
+		$state = $r->state;
+		$list = self::with(['state'])
+			->select(
+				'id',
+				'name',
+				'state_id'
+			)
 			->where(function ($q) use ($key) {
 				$q->where('name', 'like', $key . '%')
 				;
-			})
-			->get();
+			});
+		if ($state != "") {
+			$list = $list->where('state_id', $state);
+		}
+		$list = $list->get();
 		return response()->json($list);
 	}
 
