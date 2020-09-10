@@ -46,6 +46,7 @@ class City extends Model {
 				'name',
 				'state_id'
 			)
+			->whereNotNull('state_id')
 			->where(function ($q) use ($key) {
 				$q->where('name', 'like', $key . '%')
 				;
@@ -57,6 +58,17 @@ class City extends Model {
 		return response()->json($list);
 	}
 
+	public static function deleteCityWithoutState() {
+		$cities = City::all();
+		$count = 0;
+		foreach ($cities as $key => $value) {
+			$state = State::find($value->state_id);
+			if ($state == null) {
+				City::find($value->id)->delete();
+			}
+		}
+
+	}
 	public static function createFromObject($record_data) {
 
 		$errors = [];
