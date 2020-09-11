@@ -1,0 +1,148 @@
+<!-- Content Wrap -->
+<div class="content-wrap cndn-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/location-pkg/country/list" type="button" class="btn-back btn-img my-tooltip" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left">
+                        <img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" />
+
+                    </a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title">{{$ctrl.action}} Country</h1>
+                    <p class="subtitle">
+                        Masters /
+                        <a href="#!/location-pkg/country/list">
+                            Countries
+                        </a> /
+                        {{$ctrl.action}}
+                    </p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!--Content Wrap -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2">
+        <form id="form" autocomplete="off">
+            <input type="hidden" name="id" value="{{$ctrl.country.id}}">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <!-- Filters -->
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills cndn-tabs">
+                                    <li class="active">
+                                        <a class="filter active" data-target="#general-info" data-toggle="tab" aria-expanded="true">
+                                            General Info
+                                        </a>
+                                    </li>
+                                    <li ng-if="$ctrl.state_permission">
+                                        <a data-target="#states" data-toggle="tab" aria-expanded="true" class="filter">
+                                            States
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <ul class="grid-row">
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">Country Name</span>
+                                                <span class="grid-col-value">{{$ctrl.country.name}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">Country Code</span>
+                                                <span class="grid-col-value">{{$ctrl.country.code}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">ISO Code</span>
+                                                <span class="grid-col-value">{{$ctrl.country.iso_code ? $ctrl.country.iso_code : '--'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">Mobile Code</span>
+                                                <span class="grid-col-value">{{$ctrl.country.mobile_code ? $ctrl.country.mobile_code : '--'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">Has State List</span>
+                                                <span class="grid-col-value">{{$ctrl.country.has_state_list ? 'Yes' : 'No'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">Active Status</span>
+                                                <span class="grid-col-value {{$ctrl.country.deleted_at ==NULL ? 'color-green' : 'color-red'}}">{{$ctrl.country.deleted_at ? 'Inactive': 'Active'}}</span>
+                                            </li>
+                                        </ul>
+                                        <div class=" tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a class="btn btn-secondary btn-nxt my-tooltip" ng-shortcut="'meta+shift+down'" ng-shortcut-click data-title="ctrl+shift+down">
+
+                                                        Next
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tab Pane -->
+                            <div class="tab-pane fade" id="states" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-lg-9 col-md-8">
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>State Name</th>
+                                                            <th>State Code</th>
+                                                            <th>Active Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(index, state) in $ctrl.states">
+                                                            <td>
+                                                                <span class="info">{{state.name}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="info">{{state.code}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="info  {{state.deleted_at ==NULL ? 'text-green' : 'text-red'}}">{{state.deleted_at ? 'Inactive' : 'Active'}}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-if="$ctrl.states.length ==0">
+                                                            <td colspan="3" style="text-align:center;">
+                                                                <span class="info">No data available in table</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- Table Responsive -->
+                                        </div><!-- Column -->
+                                        <div class="tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a class="btn btn-secondary btn-prev my-tooltip" ng-shortcut="'meta+shift+up'" ng-shortcut-click data-title="ctrl+shift+up">Previous</a>
+
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->

@@ -1,0 +1,72 @@
+<!-- Content Wrap -->
+<div class="content-wrap cndn-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/location-pkg/city/list" type="button" class="btn-back btn-img">
+                        <img class="img-responsive my-tooltip" src="./public/theme/img/content/previous.svg" alt="Back" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left" />
+                    </a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title">{{$ctrl.action}} City</h1>
+                    <p class="subtitle">
+                        Masters /
+                        <a href="#!/location-pkg/city/list">
+                            Cities
+                        </a> /
+                        {{$ctrl.action}}
+                    </p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!-- Content Wrap -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2">
+        <form id="form" autocomplete="off">
+            <input type="hidden" name="id" value="{{$ctrl.city.id}}">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills editDetails-tabs">
+                                    <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Info</a></li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="tab-pane-wrap">
+                                        <div class="row">
+                                            <ul class="grid-row">
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">City Name</span>
+                                                    <span class="grid-col-value">{{$ctrl.city.name}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">State Name</span>
+                                                    <span class="grid-col-value">{{$ctrl.city.state.name}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Active Status</span>
+                                                    <span class="grid-col-value {{$ctrl.city.deleted_at ==NULL ? 'color-green' : 'color-red'}}">{{$ctrl.city.deleted_at ? 'Inactive': 'Active'}}</span>
+                                                </li>
+                                            </ul>
+                                        </div><!-- Column -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->
