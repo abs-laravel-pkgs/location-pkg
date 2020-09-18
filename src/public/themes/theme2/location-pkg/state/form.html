@@ -59,6 +59,12 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label>E-Invoice State Code<span class="mandatory">*</span></label>
+                                                <input type="text" name="e_invoice_state_code" ng-model='$ctrl.state.e_invoice_state_code' class="form-control required" placeholder="Enter E-Invoice State Code">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
                                                 <label>Country<span class="mandatory">*</span></label>
                                                 <md-select ng-model="$ctrl.state.country_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Country">
                                                     <md-select-header class="demo-select-header">

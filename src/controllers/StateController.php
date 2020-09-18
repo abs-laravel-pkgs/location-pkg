@@ -57,6 +57,7 @@ class StateController extends Controller {
 				'states.id',
 				'states.name',
 				'states.code',
+				DB::raw('IF(states.e_invoice_state_code IS NULL,"--",states.e_invoice_state_code) as e_invoice_state_code'),
 				'countries.name as country_name',
 				'countries.code as country_code',
 				DB::raw('COUNT(DISTINCT(regions.id)) as regions_count'),

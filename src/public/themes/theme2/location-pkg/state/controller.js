@@ -59,6 +59,7 @@ app.component('stateListPkg', {
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'states.name' },
                 { data: 'code', name: 'states.code' },
+                { data: 'e_invoice_state_code', name: 'states.e_invoice_state_code' },
                 { data: 'regions_count', name: 'regions', searchable: false },
                 { data: 'cities_count', name: 'cities', searchable: false },
                 { data: 'country_name', name: 'countries.name' },
@@ -84,7 +85,7 @@ app.component('stateListPkg', {
         }
 
         $("#search_state").keyup(function() {
-            dataTable.draw(this.value);
+            dataTable.search(this.value).draw();
         });
 
         //FOCUS ON SEARCH FIELD
@@ -280,6 +281,11 @@ app.component('stateForm', {
                     minlength: 3,
                     maxlength: 191,
                     alpha: true,
+                },
+                'e_invoice_state_code': {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 3,
                 },
                 'country_id': {
                     required: true,
