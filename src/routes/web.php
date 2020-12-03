@@ -1,5 +1,9 @@
 <?php
 
+Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web'], 'prefix' => 'location-pkg'], function () {
+	Route::post('/state/get', 'StateController@getStates')->name('getStates');
+});
+
 Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'], 'prefix' => 'location-pkg'], function () {
 
 	//COUNTRY
@@ -17,7 +21,6 @@ Route::group(['namespace' => 'Abs\LocationPkg', 'middleware' => ['web', 'auth'],
 	Route::get('/state/delete', 'StateController@deleteStatePkg')->name('deleteStatePkg');
 	Route::get('/state/view', 'StateController@viewStatePkg')->name('viewStatePkg');
 	Route::get('/state/state-filter', 'StateController@getStateFilter')->name('getStateFilter');
-	Route::post('/state/get', 'StateController@getStates')->name('getStates');
 
 	//CITY
 	Route::get('/cities/get-list', 'CityController@getCityPkgList')->name('getCityPkgList');
