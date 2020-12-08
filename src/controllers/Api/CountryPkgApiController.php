@@ -4,9 +4,9 @@ namespace Abs\LocationPkg\Controllers\Api;
 
 use Abs\BasicPkg\Controllers\Api\BaseController;
 use Abs\BasicPkg\Traits\CrudTrait;
-use App\Models\Masters\Locations\State;
+use App\Models\Masters\Locations\Country;
 
-class StatePkgApiController extends BaseController {
+class CountryPkgApiController extends BaseController {
 	use CrudTrait;
-	public $model = State::class;
+	public $model = Country::class;
 }
