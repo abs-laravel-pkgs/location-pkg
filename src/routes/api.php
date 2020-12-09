@@ -3,7 +3,7 @@ use App\Http\Controllers\Api\Masters\Locations\CityApiController;
 use App\Http\Controllers\Api\Masters\Locations\CountryApiController;
 use App\Http\Controllers\Api\Masters\Locations\StateApiController;
 
-Route::group(['middleware' => ['api', 'auth:api']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
 	Route::group(['prefix' => '/api/masters/locations/state'], function () {
 		$className = StateApiController::class;
 		Route::get('index', $className . '@index');
