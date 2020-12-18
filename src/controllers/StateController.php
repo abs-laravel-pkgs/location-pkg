@@ -242,7 +242,7 @@ class StateController extends Controller {
 				'code.unique' => 'Region Code is already taken',
 				'name.required' => 'Region Name is Required',
 				'name.max' => 'Region Name Maximum 191 Characters',
-				'name.min' => 'Region Name Minimum 3 Characters',
+				'name.min' => 'Region Name Minimum 2 Characters',
 				'name.unique' => 'Region Name is already taken',
 			];
 			if (!empty($request->regions)) {
@@ -258,7 +258,7 @@ class StateController extends Controller {
 						'name' => [
 							'required:true',
 							'max:191',
-							'min:3',
+							'min:2',
 							'unique:regions,name,' . $region['id'] . ',id,state_id,' . $request->id,
 							'unique:regions,name,' . $region['id'] . ',id,state_id,' . $request->id . ',company_id,' . Auth::user()->company_id,
 						],

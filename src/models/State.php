@@ -16,6 +16,7 @@ class State extends Model {
 		'code',
 		'name',
 		'e_invoice_state_code',
+		'cess_on_gst_coa_code',
 		'country_id',
 	];
 

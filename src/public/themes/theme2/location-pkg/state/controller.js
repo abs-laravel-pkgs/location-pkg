@@ -253,7 +253,7 @@ app.component('stateForm', {
         });
         jQuery.validator.addClassRules('region_name', {
             required: true,
-            minlength: 3,
+            minlength: 2,
             maxlength: 191,
         });
 
