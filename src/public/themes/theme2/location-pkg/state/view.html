@@ -60,6 +60,18 @@
                                                 <span class="grid-col-value">{{$ctrl.state.e_invoice_state_code}}</span>
                                             </li>
                                             <li class="grid-col-3">
+                                                <span class="grid-col-label">CGST</span>
+                                                <span class="grid-col-value">{{$ctrl.state.cgst_coa_code ? $ctrl.state.cgst_coa_code : '--'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">SGST</span>
+                                                <span class="grid-col-value">{{$ctrl.state.sgst_coa_code ? $ctrl.state.sgst_coa_code : '--'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
+                                                <span class="grid-col-label">IGST</span>
+                                                <span class="grid-col-value">{{$ctrl.state.igst_coa_code ? $ctrl.state.igst_coa_code : '--'}}</span>
+                                            </li>
+                                            <li class="grid-col-3">
                                                 <span class="grid-col-label">CESS on GST COA Code</span>
                                                 <span class="grid-col-value">{{$ctrl.state.cess_on_gst_coa_code ? $ctrl.state.cess_on_gst_coa_code : '--'}}</span>
                                             </li>
