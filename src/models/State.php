@@ -22,6 +22,15 @@ class State extends Model {
 		'cess_on_gst_coa_code',
 		'country_id',
 	];
+	protected $hidden = [
+		'created_by_id',
+		'updated_by_id',
+		'deleted_by_id',
+		'created_at',
+		'updated_at',
+		'deleted_at',
+		'country',
+	];
 
 	protected $appends = ['switch_value'];
 
