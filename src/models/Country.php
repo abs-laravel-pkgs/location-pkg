@@ -32,7 +32,7 @@ class Country extends Model
 
 	public static function getCountries()
 	{
-		$query = Country::select('id', 'code', 'name', 'has_state_list')
+		$query = Country::select('id', 'code', 'name', 'has_state_list', 'iso_code')
 			->orderBy('name');
 		$country_list = $query->get();
 

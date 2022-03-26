@@ -49,6 +49,12 @@ class State extends Model {
 		return $this->hasMany('App\City');
 	}
 
+  public function scopeFilterCountry($q, $country){
+    return $q->whereHas('country', function($q) use ($country){
+      $q->where($q->qualifyColumn('id'), $country->id);
+    });
+  }
+
 	public static function getStates($params) {
 		$query = State::select('id', 'code', 'name', 'country_id')->orderBy('name');
 		if ($params['country_id']) {
